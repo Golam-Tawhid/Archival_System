@@ -33,3 +33,4 @@ __pycache__/
 # IDEs and editor files
 .vscode/
 .idea/
+backend/.venv

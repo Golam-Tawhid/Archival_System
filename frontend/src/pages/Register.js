@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,6 +21,7 @@ function Register() {
     try {
       const response = await api.post("/users/register", form);
       alert("User registered successfully!");
+      navigate("/");
       console.log(response.data);
     } catch (error) {
       console.error("Registration error:", error);

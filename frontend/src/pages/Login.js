@@ -1,43 +1,51 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/users/login", form);
-      alert("Login successful!");
-      console.log(response.data);
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Invalid email or password.");
+      const response = await api.post("/users/login", { email, password });
+      const { role, token } = response.data;
+
+      // Store user role and token (for session handling)
+      localStorage.setItem("userRole", role);
+      localStorage.setItem("authToken", token);
+
+      // Redirect based on role
+      if (role === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/user-home");
+      }
+    } catch (err) {
+      setError("Login failed. Please check your email and password.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleLogin}>
       <input
-        name="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
-        value={form.email}
-        onChange={handleChange}
+        required
       />
       <input
-        name="password"
         type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
-        value={form.password}
-        onChange={handleChange}
+        required
       />
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <button type="submit">Login</button>
     </form>
   );
