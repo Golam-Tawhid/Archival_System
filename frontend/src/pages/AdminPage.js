@@ -8,7 +8,7 @@ function AdminPage() {
 
   const fetchTasks = async () => {
     try {
-      const response = await api.get("/tasks");
+      const response = await api.get("/tasks/");
       setTasks(response.data.tasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);

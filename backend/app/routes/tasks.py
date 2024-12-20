@@ -5,9 +5,11 @@ from datetime import datetime
 
 bp = Blueprint('tasks', __name__, url_prefix='/tasks')
 
-@bp.route('/', methods=['POST'])
+@bp.route('/', methods=['POST','OPTIONS'])
 def create_task():
     """Create a new task"""
+    if request.method == 'OPTIONS':
+        return '', 200 
     data = request.json
     task = {
         "title": data['title'],
