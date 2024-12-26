@@ -1,5 +1,7 @@
-from .users import bp as users_bp
-from .tasks import bp as tasks_bp
+# Initialize routes package
+from .auth import auth_bp
+from .tasks import tasks_bp
+from .users import users_bp
+from .reports import reports_bp
 
-# You can import additional blueprints as needed
-# e.g., from .reports import bp as reports_bp
+__all__ = ['auth_bp', 'tasks_bp', 'users_bp', 'reports_bp']
