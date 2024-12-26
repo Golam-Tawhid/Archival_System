@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models.user import User
+from app.models.user import User
 import bcrypt
 
 users_bp = Blueprint('users', __name__)

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models.task import Task
-from models.user import User
+from app.models.task import Task
+from app.models.user import User
 from datetime import datetime
 import json
 
