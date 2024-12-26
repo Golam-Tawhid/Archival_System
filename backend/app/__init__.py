@@ -1,16 +1,18 @@
 from flask import Flask
+from .extensions import db
 from flask_cors import CORS
-from .extensions import mongo
-from .routes import tasks, users
+from .routes import users_bp, tasks_bp
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object("config.Config")
-    CORS(app)
-    mongo.init_app(app)
+    app.config.from_object('app.config.Config')
 
-    # Register Blueprints
-    app.register_blueprint(tasks.bp)
-    app.register_blueprint(users.bp)
+    # Initialize Extensions
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}},supports_credentials=True)
+    db.init_app(app)
+
+    # Register Routes
+    app.register_blueprint(users_bp)
+    app.register_blueprint(tasks_bp)
 
     return app
