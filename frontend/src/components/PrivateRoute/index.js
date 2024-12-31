@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { CircularProgress, Box } from '@mui/material';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { CircularProgress, Box } from "@mui/material";
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);

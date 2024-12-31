@@ -16,7 +16,6 @@ import {
   IconButton,
   Dialog,
   DialogTitle,
-  DialogContent,
   DialogActions,
   CircularProgress,
   Tooltip,
@@ -24,8 +23,6 @@ import {
 import {
   Add as AddIcon,
   FilterList as FilterIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
   CheckCircle as ApproveIcon,
   Archive as ArchiveIcon,
 } from "@mui/icons-material";
@@ -65,7 +62,6 @@ function Tasks() {
   });
 
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     open: false,
     title: "",
@@ -110,6 +106,20 @@ function Tasks() {
     setFilters({
       ...filters,
       [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleUpdateTask = (taskId, newStatus) => {
+    setConfirmDialog({
+      open: true,
+      title: "Are you sure you want to change the status of this task?",
+      action: () => {
+        const updatedTaskData = {
+          status: newStatus,
+        };
+        dispatch(updateTask({ taskId, data: updatedTaskData }));
+        setConfirmDialog({ open: false, title: "", action: null });
+      },
     });
   };
 
@@ -277,6 +287,19 @@ function Tasks() {
                 <Button size="small" onClick={() => handleEditTask(task._id)}>
                   View Details
                 </Button>
+                <TextField
+                  select
+                  label="Status"
+                  value={task.status}
+                  onChange={(e) => handleUpdateTask(task._id, e.target.value)}
+                  sx={{ mr: 1 }}
+                >
+                  {statusOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 {canApprove(task) && (
                   <Tooltip title="Approve Task">
                     <IconButton

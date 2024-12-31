@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Paper,
@@ -26,40 +26,40 @@ import {
   DialogActions,
   FormControl,
   InputLabel,
-  Select
-} from '@mui/material';
+  Select,
+} from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   Search as SearchIcon,
   Print as PrintIcon,
   FilterList as FilterIcon,
-  Clear as ClearIcon
-} from '@mui/icons-material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { searchTasks } from '../../store/slices/tasksSlice';
-import { generateReport } from '../../store/slices/reportsSlice';
+  Clear as ClearIcon,
+} from "@mui/icons-material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { searchTasks } from "../../store/slices/tasksSlice";
+import { generateReport } from "../../store/slices/reportsSlice";
 
 const departments = [
-  { value: 'CSE', label: 'Computer Science and Engineering' },
-  { value: 'ECE', label: 'Electronics and Communication Engineering' },
-  { value: 'ME', label: 'Mechanical Engineering' },
-  { value: 'RESEARCH', label: 'Research' },
-  { value: 'ADMIN', label: 'Administration' }
+  { value: "CSE", label: "Computer Science and Engineering" },
+  { value: "ECE", label: "Electronics and Communication Engineering" },
+  { value: "ME", label: "Mechanical Engineering" },
+  { value: "RESEARCH", label: "Research" },
+  { value: "ADMIN", label: "Administration" },
 ];
 
 const statusOptions = [
-  { value: 'not_started', label: 'Not Started' },
-  { value: 'in_progress', label: 'In Progress' },
-  { value: 'pending_approval', label: 'Pending Approval' },
-  { value: 'done', label: 'Done' },
-  { value: 'archived', label: 'Archived' }
+  { value: "not_started", label: "Not Started" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "pending_approval", label: "Pending Approval" },
+  { value: "done", label: "Done" },
+  { value: "archived", label: "Archived" },
 ];
 
 const reportTemplates = [
-  { id: 'task_summary', name: 'Task Summary Report' },
-  { id: 'department_performance', name: 'Department Performance Report' },
-  { id: 'user_activity', name: 'User Activity Report' },
-  { id: 'archive_summary', name: 'Archive Summary Report' }
+  { id: "task_summary", name: "Task Summary Report" },
+  { id: "department_performance", name: "Department Performance Report" },
+  { id: "user_activity", name: "User Activity Report" },
+  { id: "archive_summary", name: "Archive Summary Report" },
 ];
 
 function QueryManagement() {
@@ -68,72 +68,76 @@ function QueryManagement() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState('');
-  
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+
   const [filters, setFilters] = useState({
-    title: '',
-    department: '',
-    status: '',
+    title: "",
+    department: "",
+    status: "",
     startDate: null,
     endDate: null,
-    tags: '',
-    priority: ''
+    tags: "",
+    priority: "",
   });
 
   const [activeFilters, setActiveFilters] = useState([]);
 
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleDateChange = (name, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSearch = () => {
     const activeFiltersList = Object.entries(filters)
-      .filter(([_, value]) => value && value !== '')
+      .filter(([_, value]) => value && value !== "")
       .map(([key, value]) => ({
         key,
-        value: value instanceof Date ? value.toLocaleDateString() : value
+        value: value instanceof Date ? value.toLocaleDateString() : value,
       }));
-    
+
     setActiveFilters(activeFiltersList);
-    
-    dispatch(searchTasks({
-      ...filters,
-      startDate: filters.startDate?.toISOString(),
-      endDate: filters.endDate?.toISOString(),
-      tags: filters.tags.split(',').map(tag => tag.trim())
-    }));
+
+    dispatch(
+      searchTasks({
+        ...filters,
+        startDate: filters.startDate?.toISOString(),
+        endDate: filters.endDate?.toISOString(),
+        tags: filters.tags.split(",").map((tag) => tag.trim()),
+      })
+    );
   };
 
   const handleClearFilters = () => {
     setFilters({
-      title: '',
-      department: '',
-      status: '',
+      title: "",
+      department: "",
+      status: "",
       startDate: null,
       endDate: null,
-      tags: '',
-      priority: ''
+      tags: "",
+      priority: "",
     });
     setActiveFilters([]);
   };
 
   const handleRemoveFilter = (filterKey) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterKey]: ''
+      [filterKey]: "",
     }));
-    setActiveFilters(prev => prev.filter(filter => filter.key !== filterKey));
+    setActiveFilters((prev) =>
+      prev.filter((filter) => filter.key !== filterKey)
+    );
   };
 
   const handlePrint = () => {
@@ -144,17 +148,19 @@ function QueryManagement() {
     if (!selectedTemplate) return;
 
     try {
-      await dispatch(generateReport({
-        template: selectedTemplate,
-        filters: {
-          ...filters,
-          startDate: filters.startDate?.toISOString(),
-          endDate: filters.endDate?.toISOString()
-        }
-      })).unwrap();
+      await dispatch(
+        generateReport({
+          template: selectedTemplate,
+          filters: {
+            ...filters,
+            startDate: filters.startDate?.toISOString(),
+            endDate: filters.endDate?.toISOString(),
+          },
+        })
+      ).unwrap();
       setPrintDialogOpen(false);
     } catch (err) {
-      console.error('Failed to generate report:', err);
+      console.error("Failed to generate report:", err);
     }
   };
 
@@ -239,7 +245,9 @@ function QueryManagement() {
                 <DatePicker
                   label="Start Date"
                   value={filters.startDate}
-                  onChange={(newValue) => handleDateChange('startDate', newValue)}
+                  onChange={(newValue) =>
+                    handleDateChange("startDate", newValue)
+                  }
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               </Grid>
@@ -247,12 +255,12 @@ function QueryManagement() {
                 <DatePicker
                   label="End Date"
                   value={filters.endDate}
-                  onChange={(newValue) => handleDateChange('endDate', newValue)}
+                  onChange={(newValue) => handleDateChange("endDate", newValue)}
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 2 }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
                   <Button
                     variant="contained"
                     startIcon={<SearchIcon />}
@@ -281,7 +289,7 @@ function QueryManagement() {
         </Accordion>
 
         {activeFilters.length > 0 && (
-          <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
             {activeFilters.map((filter) => (
               <Chip
                 key={filter.key}
@@ -294,7 +302,12 @@ function QueryManagement() {
       </Paper>
 
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="200px"
+        >
           <CircularProgress />
         </Box>
       ) : (
@@ -320,9 +333,13 @@ function QueryManagement() {
                       <Chip
                         label={task.status}
                         color={
-                          task.status === 'done' ? 'success' :
-                          task.status === 'in_progress' ? 'primary' :
-                          task.status === 'pending_approval' ? 'warning' : 'default'
+                          task.status === "done"
+                            ? "success"
+                            : task.status === "in_progress"
+                            ? "primary"
+                            : task.status === "pending_approval"
+                            ? "warning"
+                            : "default"
                         }
                         size="small"
                       />
@@ -346,10 +363,7 @@ function QueryManagement() {
         </TableContainer>
       )}
 
-      <Dialog
-        open={printDialogOpen}
-        onClose={() => setPrintDialogOpen(false)}
-      >
+      <Dialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)}>
         <DialogTitle>Generate Report</DialogTitle>
         <DialogContent>
           <FormControl fullWidth sx={{ mt: 2 }}>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Paper,
@@ -21,8 +21,8 @@ import {
   DialogContent,
   DialogActions,
   CircularProgress,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import {
   ArrowBack as BackIcon,
   Edit as EditIcon,
@@ -31,14 +31,18 @@ import {
   CheckCircle as ApproveIcon,
   Archive as ArchiveIcon,
   AttachFile as AttachmentIcon,
-  History as HistoryIcon
-} from '@mui/icons-material';
-import { updateTask, approveTask, archiveTask } from '../../store/slices/tasksSlice';
+  History as HistoryIcon,
+} from "@mui/icons-material";
+import {
+  updateTask,
+  approveTask,
+  archiveTask,
+} from "../../store/slices/tasksSlice";
 
 const priorities = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' }
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
 ];
 
 function TaskDetails() {
@@ -47,24 +51,24 @@ function TaskDetails() {
   const dispatch = useDispatch();
   const { items: tasks, loading, error } = useSelector((state) => state.tasks);
   const { user } = useSelector((state) => state.auth);
-  
+
   const [task, setTask] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     open: false,
-    title: '',
-    action: null
+    title: "",
+    action: null,
   });
 
   useEffect(() => {
-    const foundTask = tasks.find(t => t._id === taskId);
+    const foundTask = tasks.find((t) => t._id === taskId);
     if (foundTask) {
       // Ensure tags is always an array
       const taskWithTags = {
         ...foundTask,
-        tags: foundTask.tags || []
+        tags: foundTask.tags || [],
       };
       setTask(taskWithTags);
       setEditedTask(taskWithTags);
@@ -72,7 +76,7 @@ function TaskDetails() {
   }, [taskId, tasks]);
 
   const handleBack = () => {
-    navigate('/tasks');
+    navigate("/tasks");
   };
 
   const handleEdit = () => {
@@ -86,9 +90,9 @@ function TaskDetails() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedTask(prev => ({
+    setEditedTask((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -97,59 +101,69 @@ function TaskDetails() {
       await dispatch(updateTask({ taskId, data: editedTask })).unwrap();
       setIsEditing(false);
     } catch (err) {
-      console.error('Failed to update task:', err);
+      console.error("Failed to update task:", err);
     }
   };
 
   const handleApprove = () => {
     setConfirmDialog({
       open: true,
-      title: 'Are you sure you want to approve this task?',
+      title: "Are you sure you want to approve this task?",
       action: async () => {
         try {
           await dispatch(approveTask(taskId)).unwrap();
-          setConfirmDialog({ open: false, title: '', action: null });
+          setConfirmDialog({ open: false, title: "", action: null });
         } catch (err) {
-          console.error('Failed to approve task:', err);
+          console.error("Failed to approve task:", err);
         }
-      }
+      },
     });
   };
 
   const handleArchive = () => {
     setConfirmDialog({
       open: true,
-      title: 'Are you sure you want to archive this task?',
+      title: "Are you sure you want to archive this task?",
       action: async () => {
         try {
           await dispatch(archiveTask(taskId)).unwrap();
-          setConfirmDialog({ open: false, title: '', action: null });
-          navigate('/tasks');
+          setConfirmDialog({ open: false, title: "", action: null });
+          navigate("/tasks");
         } catch (err) {
-          console.error('Failed to archive task:', err);
+          console.error("Failed to archive task:", err);
         }
-      }
+      },
     });
   };
 
   const canEdit = () => {
-    return user?.permissions?.includes('edit_task') &&
-           (task?.created_by === user?._id || task?.assigned_to === user?._id);
+    return (
+      user?.permissions?.includes("edit_task") &&
+      (task?.created_by === user?._id || task?.assigned_to === user?._id)
+    );
   };
 
   const canApprove = () => {
-    return user?.permissions?.includes('approve_task') &&
-           task?.status === 'pending_approval';
+    return (
+      user?.permissions?.includes("approve_task") &&
+      task?.status === "pending_approval"
+    );
   };
 
   const canArchive = () => {
-    return user?.permissions?.includes('access_archives') &&
-           task?.status === 'done';
+    return (
+      user?.permissions?.includes("access_archives") && task?.status === "done"
+    );
   };
 
   if (loading || !task) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="80vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -157,11 +171,7 @@ function TaskDetails() {
 
   return (
     <Box>
-      <Button
-        startIcon={<BackIcon />}
-        onClick={handleBack}
-        sx={{ mb: 3 }}
-      >
+      <Button startIcon={<BackIcon />} onClick={handleBack} sx={{ mb: 3 }}>
         Back to Tasks
       </Button>
 
@@ -172,7 +182,14 @@ function TaskDetails() {
       )}
 
       <Paper sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
           <Typography variant="h5" component="h1">
             Task Details
           </Typography>
@@ -237,7 +254,7 @@ function TaskDetails() {
             <TextField
               fullWidth
               label="Status"
-              value={task.status.replace('_', ' ').toUpperCase()}
+              value={task.status.replace("_", " ").toUpperCase()}
               disabled
             />
           </Grid>
@@ -264,7 +281,7 @@ function TaskDetails() {
             <Typography variant="subtitle2" gutterBottom>
               Tags
             </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {(task.tags || []).map((tag, index) => (
                 <Chip key={index} label={tag} size="small" />
               ))}
@@ -300,7 +317,7 @@ function TaskDetails() {
 
           {isEditing && (
             <Grid item xs={12}>
-              <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Button
                   variant="contained"
                   startIcon={<SaveIcon />}
@@ -333,8 +350,12 @@ function TaskDetails() {
             {(task.change_log || []).map((change, index) => (
               <ListItem key={index}>
                 <ListItemText
-                  primary={`${change.field.charAt(0).toUpperCase() + change.field.slice(1)} changed`}
-                  secondary={`From: ${change.old_value || 'None'} → To: ${change.new_value}`}
+                  primary={`${
+                    change.field.charAt(0).toUpperCase() + change.field.slice(1)
+                  } changed`}
+                  secondary={`From: ${change.old_value || "None"} → To: ${
+                    change.new_value
+                  }`}
                 />
                 <Typography variant="caption">
                   {new Date(change.changed_at).toLocaleString()}
@@ -350,14 +371,24 @@ function TaskDetails() {
 
       <Dialog
         open={confirmDialog.open}
-        onClose={() => setConfirmDialog({ open: false, title: '', action: null })}
+        onClose={() =>
+          setConfirmDialog({ open: false, title: "", action: null })
+        }
       >
         <DialogTitle>{confirmDialog.title}</DialogTitle>
         <DialogActions>
-          <Button onClick={() => setConfirmDialog({ open: false, title: '', action: null })}>
+          <Button
+            onClick={() =>
+              setConfirmDialog({ open: false, title: "", action: null })
+            }
+          >
             Cancel
           </Button>
-          <Button onClick={confirmDialog.action} variant="contained" color="primary">
+          <Button
+            onClick={confirmDialog.action}
+            variant="contained"
+            color="primary"
+          >
             Confirm
           </Button>
         </DialogActions>

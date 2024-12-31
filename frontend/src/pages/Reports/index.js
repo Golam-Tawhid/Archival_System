@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Paper,
@@ -22,57 +22,64 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Chip
-} from '@mui/material';
+  Chip,
+} from "@mui/material";
 import {
   Description as ReportIcon,
   Download as DownloadIcon,
   Delete as DeleteIcon,
   Print as PrintIcon,
-  Share as ShareIcon
-} from '@mui/icons-material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { fetchReports, generateReport, downloadReport, deleteReport } from '../../store/slices/reportsSlice';
+  Share as ShareIcon,
+} from "@mui/icons-material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {
+  fetchReports,
+  generateReport,
+  downloadReport,
+  deleteReport,
+} from "../../store/slices/reportsSlice";
 
 const reportTemplates = [
   {
-    id: 'task_summary',
-    name: 'Task Summary Report',
-    description: 'Overview of all tasks with their current status and completion rates',
-    icon: <ReportIcon />
+    id: "task_summary",
+    name: "Task Summary Report",
+    description:
+      "Overview of all tasks with their current status and completion rates",
+    icon: <ReportIcon />,
   },
   {
-    id: 'department_performance',
-    name: 'Department Performance Report',
-    description: 'Detailed analysis of task completion and efficiency by department',
-    icon: <ReportIcon />
+    id: "department_performance",
+    name: "Department Performance Report",
+    description:
+      "Detailed analysis of task completion and efficiency by department",
+    icon: <ReportIcon />,
   },
   {
-    id: 'user_activity',
-    name: 'User Activity Report',
-    description: 'Track user contributions and task management patterns',
-    icon: <ReportIcon />
+    id: "user_activity",
+    name: "User Activity Report",
+    description: "Track user contributions and task management patterns",
+    icon: <ReportIcon />,
   },
   {
-    id: 'archive_summary',
-    name: 'Archive Summary Report',
-    description: 'Summary of archived tasks and historical data',
-    icon: <ReportIcon />
-  }
+    id: "archive_summary",
+    name: "Archive Summary Report",
+    description: "Summary of archived tasks and historical data",
+    icon: <ReportIcon />,
+  },
 ];
 
 function Reports() {
   const dispatch = useDispatch();
   const { reports, loading, error } = useSelector((state) => state.reports);
   const { user } = useSelector((state) => state.auth);
-  
+
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [generateDialog, setGenerateDialog] = useState(false);
   const [reportParams, setReportParams] = useState({
     startDate: null,
     endDate: null,
-    department: user?.department || '',
-    format: 'pdf'
+    department: user?.department || "",
+    format: "pdf",
   });
 
   useEffect(() => {
@@ -83,14 +90,16 @@ function Reports() {
     if (!selectedTemplate) return;
 
     try {
-      await dispatch(generateReport({
-        template: selectedTemplate.id,
-        params: reportParams
-      })).unwrap();
+      await dispatch(
+        generateReport({
+          template: selectedTemplate.id,
+          params: reportParams,
+        })
+      ).unwrap();
       setGenerateDialog(false);
       setSelectedTemplate(null);
     } catch (err) {
-      console.error('Failed to generate report:', err);
+      console.error("Failed to generate report:", err);
     }
   };
 
@@ -98,7 +107,7 @@ function Reports() {
     try {
       await dispatch(downloadReport({ reportId, format })).unwrap();
     } catch (err) {
-      console.error('Failed to download report:', err);
+      console.error("Failed to download report:", err);
     }
   };
 
@@ -106,7 +115,7 @@ function Reports() {
     try {
       await dispatch(deleteReport(reportId)).unwrap();
     } catch (err) {
-      console.error('Failed to delete report:', err);
+      console.error("Failed to delete report:", err);
     }
   };
 
@@ -167,8 +176,8 @@ function Reports() {
                     sx={{
                       mb: 2,
                       border: 1,
-                      borderColor: 'divider',
-                      borderRadius: 1
+                      borderColor: "divider",
+                      borderRadius: 1,
                     }}
                   >
                     <ListItemText
@@ -176,7 +185,8 @@ function Reports() {
                       secondary={
                         <Box>
                           <Typography variant="body2" color="text.secondary">
-                            Generated: {new Date(report.created_at).toLocaleString()}
+                            Generated:{" "}
+                            {new Date(report.created_at).toLocaleString()}
                           </Typography>
                           <Box sx={{ mt: 1 }}>
                             <Chip
@@ -185,7 +195,7 @@ function Reports() {
                               sx={{ mr: 1 }}
                             />
                             <Chip
-                              label={report.department || 'All Departments'}
+                              label={report.department || "All Departments"}
                               size="small"
                               variant="outlined"
                             />
@@ -196,7 +206,7 @@ function Reports() {
                     <ListItemSecondaryAction>
                       <IconButton
                         edge="end"
-                        onClick={() => handleDownload(report._id, 'pdf')}
+                        onClick={() => handleDownload(report._id, "pdf")}
                         title="Download PDF"
                       >
                         <DownloadIcon />
@@ -236,10 +246,12 @@ function Reports() {
                 <DatePicker
                   label="Start Date"
                   value={reportParams.startDate}
-                  onChange={(newValue) => setReportParams(prev => ({
-                    ...prev,
-                    startDate: newValue
-                  }))}
+                  onChange={(newValue) =>
+                    setReportParams((prev) => ({
+                      ...prev,
+                      startDate: newValue,
+                    }))
+                  }
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               </Grid>
@@ -247,10 +259,12 @@ function Reports() {
                 <DatePicker
                   label="End Date"
                   value={reportParams.endDate}
-                  onChange={(newValue) => setReportParams(prev => ({
-                    ...prev,
-                    endDate: newValue
-                  }))}
+                  onChange={(newValue) =>
+                    setReportParams((prev) => ({
+                      ...prev,
+                      endDate: newValue,
+                    }))
+                  }
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               </Grid>
@@ -260,10 +274,12 @@ function Reports() {
                   select
                   label="Format"
                   value={reportParams.format}
-                  onChange={(e) => setReportParams(prev => ({
-                    ...prev,
-                    format: e.target.value
-                  }))}
+                  onChange={(e) =>
+                    setReportParams((prev) => ({
+                      ...prev,
+                      format: e.target.value,
+                    }))
+                  }
                 >
                   <MenuItem value="pdf">PDF</MenuItem>
                   <MenuItem value="csv">CSV</MenuItem>

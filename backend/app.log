@@ -1,0 +1,19 @@
+2024-12-31 14:46:08,978 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-31 14:46:08,978 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-31 14:46:26,397 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:26] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2024-12-31 14:46:26,691 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:26] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2024-12-31 14:46:26,695 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:26] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2024-12-31 14:46:43,744 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:43] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2024-12-31 14:46:44,878 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:44] "GET /api/auth/me HTTP/1.1" 200 -
+2024-12-31 14:46:44,923 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:44] "GET /api/auth/me HTTP/1.1" 200 -
+2024-12-31 14:46:45,509 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2024-12-31 14:46:45,510 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2024-12-31 14:46:45,546 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2024-12-31 14:46:45,552 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2024-12-31 14:46:45,694 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2024-12-31 14:46:45,706 - INFO - 127.0.0.1 - - [31/Dec/2024 14:46:45] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2024-12-31 14:47:16,678 - INFO - 127.0.0.1 - - [31/Dec/2024 14:47:16] "OPTIONS /api/tasks/department/CSE HTTP/1.1" 200 -
+2024-12-31 14:47:16,680 - INFO - 127.0.0.1 - - [31/Dec/2024 14:47:16] "OPTIONS /api/tasks/department/CSE HTTP/1.1" 200 -
+2024-12-31 14:47:16,698 - INFO - 127.0.0.1 - - [31/Dec/2024 14:47:16] "GET /api/tasks/department/CSE HTTP/1.1" 200 -
+2024-12-31 14:47:16,704 - INFO - 127.0.0.1 - - [31/Dec/2024 14:47:16] "GET /api/tasks/department/CSE HTTP/1.1" 200 -

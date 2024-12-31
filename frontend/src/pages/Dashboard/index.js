@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -10,21 +10,21 @@ import {
   CardContent,
   Button,
   CircularProgress,
-  Chip
-} from '@mui/material';
+  Chip,
+} from "@mui/material";
 import {
   Assignment as TaskIcon,
   Pending as PendingIcon,
   CheckCircle as DoneIcon,
   Archive as ArchiveIcon,
-  Add as AddIcon
-} from '@mui/icons-material';
-import { fetchTasks } from '../../store/slices/tasksSlice';
+  Add as AddIcon,
+} from "@mui/icons-material";
+import { fetchTasks } from "../../store/slices/tasksSlice";
 
 const StatusCard = ({ title, count, icon, color }) => (
-  <Card sx={{ height: '100%' }}>
+  <Card sx={{ height: "100%" }}>
     <CardContent>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         {icon}
         <Typography variant="h6" component="div" sx={{ ml: 1 }}>
           {title}
@@ -40,16 +40,32 @@ const StatusCard = ({ title, count, icon, color }) => (
 const RecentTaskCard = ({ task, onViewClick }) => (
   <Card sx={{ mb: 2 }}>
     <CardContent>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Typography variant="h6" component="div" noWrap sx={{ maxWidth: '70%' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 1,
+        }}
+      >
+        <Typography
+          variant="h6"
+          component="div"
+          noWrap
+          sx={{ maxWidth: "70%" }}
+        >
           {task.title}
         </Typography>
         <Chip
           label={task.status}
           color={
-            task.status === 'done' ? 'success' :
-            task.status === 'in_progress' ? 'primary' :
-            task.status === 'pending_approval' ? 'warning' : 'default'
+            task.status === "done"
+              ? "success"
+              : task.status === "in_progress"
+              ? "primary"
+              : task.status === "pending_approval"
+              ? "warning"
+              : "default"
           }
           size="small"
         />
@@ -77,7 +93,7 @@ function Dashboard() {
     inProgress: 0,
     pendingApproval: 0,
     done: 0,
-    archived: 0
+    archived: 0,
   });
 
   useEffect(() => {
@@ -86,38 +102,41 @@ function Dashboard() {
 
   useEffect(() => {
     if (tasks.length > 0) {
-      const stats = tasks.reduce((acc, task) => {
-        acc.total++;
-        switch (task.status) {
-          case 'in_progress':
-            acc.inProgress++;
-            break;
-          case 'pending_approval':
-            acc.pendingApproval++;
-            break;
-          case 'done':
-            acc.done++;
-            break;
-          case 'archived':
-            acc.archived++;
-            break;
-          default:
-            break;
+      const stats = tasks.reduce(
+        (acc, task) => {
+          acc.total++;
+          switch (task.status) {
+            case "in_progress":
+              acc.inProgress++;
+              break;
+            case "pending_approval":
+              acc.pendingApproval++;
+              break;
+            case "done":
+              acc.done++;
+              break;
+            case "archived":
+              acc.archived++;
+              break;
+            default:
+              break;
+          }
+          return acc;
+        },
+        {
+          total: 0,
+          inProgress: 0,
+          pendingApproval: 0,
+          done: 0,
+          archived: 0,
         }
-        return acc;
-      }, {
-        total: 0,
-        inProgress: 0,
-        pendingApproval: 0,
-        done: 0,
-        archived: 0
-      });
+      );
       setStatistics(stats);
     }
   }, [tasks]);
 
   const handleCreateTask = () => {
-    navigate('/tasks/create');
+    navigate("/tasks/create");
   };
 
   const handleViewTask = (taskId) => {
@@ -126,7 +145,12 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="80vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -134,7 +158,14 @@ function Dashboard() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+        }}
+      >
         <Typography variant="h4" component="h1">
           Welcome, {user?.name}
         </Typography>
@@ -216,13 +247,13 @@ function Dashboard() {
               <Box
                 key={department}
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   mb: 1,
                   p: 1,
-                  bgcolor: 'background.default',
-                  borderRadius: 1
+                  bgcolor: "background.default",
+                  borderRadius: 1,
                 }}
               >
                 <Typography>{department}</Typography>

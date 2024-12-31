@@ -1,20 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 // Fetch tasks based on filters
 export const fetchTasks = createAsyncThunk(
-  'tasks/fetchTasks',
+  "tasks/fetchTasks",
   async (filters = {}, { rejectWithValue }) => {
     try {
-      let url = '/api/tasks';
-      
-      if (filters.department) {
+      let url = "/api/tasks";
+
+      if (filters.department && filters.department !== "") {
         url = `/api/tasks/department/${filters.department}`;
       } else if (filters.status) {
         url = `/api/tasks/status/${filters.status}`;
       }
-      
-      const response = await axios.get(url);
+
+      const response = await axios.get(url || "/api/tasks"); // Fetch all tasks if no filters are applied
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -24,10 +24,10 @@ export const fetchTasks = createAsyncThunk(
 
 // Create new task
 export const createTask = createAsyncThunk(
-  'tasks/createTask',
+  "tasks/createTask",
   async (taskData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/tasks', taskData);
+      const response = await axios.post("/api/tasks", taskData);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -37,7 +37,7 @@ export const createTask = createAsyncThunk(
 
 // Update task
 export const updateTask = createAsyncThunk(
-  'tasks/updateTask',
+  "tasks/updateTask",
   async ({ taskId, data }, { rejectWithValue }) => {
     try {
       const response = await axios.put(`/api/tasks/${taskId}`, data);
@@ -50,7 +50,7 @@ export const updateTask = createAsyncThunk(
 
 // Approve task
 export const approveTask = createAsyncThunk(
-  'tasks/approveTask',
+  "tasks/approveTask",
   async (taskId, { rejectWithValue }) => {
     try {
       const response = await axios.post(`/api/tasks/${taskId}/approve`);
@@ -63,7 +63,7 @@ export const approveTask = createAsyncThunk(
 
 // Archive task
 export const archiveTask = createAsyncThunk(
-  'tasks/archiveTask',
+  "tasks/archiveTask",
   async (taskId, { rejectWithValue }) => {
     try {
       const response = await axios.post(`/api/tasks/${taskId}/archive`);
@@ -76,10 +76,10 @@ export const archiveTask = createAsyncThunk(
 
 // Search tasks
 export const searchTasks = createAsyncThunk(
-  'tasks/searchTasks',
+  "tasks/searchTasks",
   async (searchParams, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/tasks/search', searchParams);
+      const response = await axios.post("/api/tasks/search", searchParams);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -95,13 +95,13 @@ const initialState = {
   filters: {
     department: null,
     status: null,
-    searchTerm: '',
-    dateRange: null
-  }
+    searchTerm: "",
+    dateRange: null,
+  },
 };
 
 const tasksSlice = createSlice({
-  name: 'tasks',
+  name: "tasks",
   initialState,
   reducers: {
     setFilters: (state, action) => {
@@ -112,7 +112,7 @@ const tasksSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,9 +127,9 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.error || 'Failed to fetch tasks';
+        state.error = action.payload?.error || "Failed to fetch tasks";
       })
-      
+
       // Create task cases
       .addCase(createTask.pending, (state) => {
         state.loading = true;
@@ -141,9 +141,9 @@ const tasksSlice = createSlice({
       })
       .addCase(createTask.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.error || 'Failed to create task';
+        state.error = action.payload?.error || "Failed to create task";
       })
-      
+
       // Update task cases
       .addCase(updateTask.pending, (state) => {
         state.loading = true;
@@ -151,7 +151,9 @@ const tasksSlice = createSlice({
       })
       .addCase(updateTask.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.items.findIndex(item => item._id === action.payload._id);
+        const index = state.items.findIndex(
+          (item) => item._id === action.payload._id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
         }
@@ -161,12 +163,14 @@ const tasksSlice = createSlice({
       })
       .addCase(updateTask.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.error || 'Failed to update task';
+        state.error = action.payload?.error || "Failed to update task";
       })
-      
+
       // Approve task cases
       .addCase(approveTask.fulfilled, (state, action) => {
-        const index = state.items.findIndex(item => item._id === action.payload._id);
+        const index = state.items.findIndex(
+          (item) => item._id === action.payload._id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
         }
@@ -174,10 +178,12 @@ const tasksSlice = createSlice({
           state.currentTask = action.payload;
         }
       })
-      
+
       // Archive task cases
       .addCase(archiveTask.fulfilled, (state, action) => {
-        const index = state.items.findIndex(item => item._id === action.payload._id);
+        const index = state.items.findIndex(
+          (item) => item._id === action.payload._id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
         }
@@ -185,7 +191,7 @@ const tasksSlice = createSlice({
           state.currentTask = action.payload;
         }
       })
-      
+
       // Search tasks cases
       .addCase(searchTasks.pending, (state) => {
         state.loading = true;
@@ -197,9 +203,9 @@ const tasksSlice = createSlice({
       })
       .addCase(searchTasks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.error || 'Failed to search tasks';
+        state.error = action.payload?.error || "Failed to search tasks";
       });
-  }
+  },
 });
 
 export const { setFilters, clearFilters, clearError } = tasksSlice.actions;
