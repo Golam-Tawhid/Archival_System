@@ -1,12 +1,19 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from pymongo import MongoClient
 from app.config import config
-from app.routes.auth import auth_bp
-from app.routes.tasks import tasks_bp
-from app.routes.users import users_bp
-from app.routes.reports import reports_bp
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler("app.log"),
+                        logging.StreamHandler()
+                    ])
+logger = logging.getLogger(__name__)
 
 db = None
 
@@ -43,7 +50,10 @@ def create_app(config_name='default'):
         raise
     
     # Register blueprints
-
+    from app.routes.auth import auth_bp
+    from app.routes.tasks import tasks_bp
+    from app.routes.users import users_bp
+    from app.routes.reports import reports_bp
     
     # Attach db to blueprints
     auth_bp.db = db
