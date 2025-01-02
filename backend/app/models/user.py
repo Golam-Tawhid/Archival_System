@@ -28,8 +28,8 @@ class User:
             'password': data['password'],  # Should be hashed before storing
             'name': data['name'],
             'department': data['department'],
-            'roles': data.get('roles', ['staff']),
-            'permissions': self._get_permissions_for_roles(data.get('roles', ['staff'])),
+            'roles': data['roles'],
+            'permissions': self._get_permissions_for_roles(data['roles']),
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow(),
             'is_active': True
