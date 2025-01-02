@@ -28,7 +28,7 @@ def register():
         print(f"Registration request received: {data}")
         
         # Validate required fields
-        required_fields = ['email', 'password', 'name', 'department']
+        required_fields = ['email', 'password', 'name', 'department', 'role']
         if not all(field in data for field in required_fields):
             missing_fields = [field for field in required_fields if field not in data]
             error_msg = f'Missing required fields: {", ".join(missing_fields)}'
@@ -38,6 +38,12 @@ def register():
         # Validate department
         if data['department'] not in User.DEPARTMENTS:
             error_msg = f'Invalid department. Must be one of: {", ".join(User.DEPARTMENTS.keys())}'
+            print(f"Validation error: {error_msg}")
+            return jsonify({'error': error_msg}), 400
+            
+        # Validate role
+        if data['role'] not in User.ROLES.values():
+            error_msg = f'Invalid role. Must be one of: {", ".join(User.ROLES.values())}'
             print(f"Validation error: {error_msg}")
             return jsonify({'error': error_msg}), 400
         
@@ -50,9 +56,8 @@ def register():
         # Hash password
         data['password'] = hash_password(data['password'])
         
-        # Set default role if not provided
-        if 'roles' not in data:
-            data['roles'] = ['staff']
+        # Set roles from the selected role
+        data['roles'] = [data['role']]
         
         # Create user
         try:
