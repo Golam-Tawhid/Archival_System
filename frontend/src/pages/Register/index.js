@@ -18,6 +18,14 @@ import {
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { register, clearError } from "../../store/slices/authSlice";
 
+const roles = [
+  { value: "super_admin", label: "Super Admin" },
+  { value: "admin", label: "Admin" },
+  { value: "department_head", label: "Department Head" },
+  { value: "faculty", label: "Faculty" },
+  { value: "staff", label: "Staff" },
+];
+
 const validationSchema = Yup.object({
   name: Yup.string()
     .required("Name is required")
@@ -32,6 +40,7 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
   department: Yup.string().required("Department is required"),
+  role: Yup.string().required("Role is required"),
 });
 
 const departments = [
@@ -65,6 +74,7 @@ function Register() {
       password: "",
       confirmPassword: "",
       department: "",
+      role: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -207,6 +217,26 @@ function Register() {
               helperText={formik.touched.department && formik.errors.department}
             >
               {departments.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              select
+              name="role"
+              label="Role"
+              id="role"
+              value={formik.values.role}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.role && Boolean(formik.errors.role)}
+              helperText={formik.touched.role && formik.errors.role}
+            >
+              {roles.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
