@@ -14,8 +14,8 @@ tasks_bp.db = None
 def has_permission(user, permission):
     return permission in user.get('permissions', [])
 
-@tasks_bp.route('', methods=['POST'])  # No trailing slash
-@tasks_bp.route('/', methods=['POST'])  # With trailing slash
+@tasks_bp.route('', methods=['POST'])
+@tasks_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_task():
     current_user_id = get_jwt_identity()
@@ -62,7 +62,7 @@ def get_task(task_id):
     
     return jsonify(task), 200
 
-@tasks_bp.route('/<task_id>', methods=['PUT'])
+@tasks_bp.route('/<task_id>', methods=['PUT','POST','DELETE'])
 @jwt_required()
 def update_task(task_id):
     current_user_id = get_jwt_identity()
@@ -74,8 +74,6 @@ def update_task(task_id):
     
     if not task:
         return jsonify({'error': 'Task not found'}), 404
-    
-    # Check permissions (removed for status change)
     
     data = request.get_json()
     updated_task = task_model.update_task(task_id, data, current_user_id)

@@ -15,8 +15,8 @@ reports_bp.db = None
 def has_permission(user, permission):
     return permission in user.get('permissions', [])
 
-@reports_bp.route('', methods=['GET'])  # No trailing slash
-@reports_bp.route('/', methods=['GET'])  # With trailing slash
+@reports_bp.route('', methods=['GET'])
+@reports_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_reports():
     current_user_id = get_jwt_identity()

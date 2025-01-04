@@ -61,9 +61,9 @@ def create_app(config_name='default'):
     users_bp.db = db
     reports_bp.db = db
     
-    app.register_blueprint(auth_bp)  # URL prefix is defined in blueprint
-    app.register_blueprint(tasks_bp)  # URL prefix is defined in blueprint
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(tasks_bp)
     app.register_blueprint(users_bp, url_prefix='/api/users')
-    app.register_blueprint(reports_bp)  # URL prefix is defined in blueprint
+    app.register_blueprint(reports_bp)
     
     return app
