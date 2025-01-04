@@ -53,13 +53,10 @@ function Tasks() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items: tasks, loading } = useSelector((state) => state.tasks);
-  const { user } = useSelector((state) => state.auth);
-
-  const [filters, setFilters] = useState({
-    status: "",
-    department: user?.department || "",
-    searchTerm: "",
-  });
+  const user = useSelector((state) => state.auth.user);
+  const filters = useSelector((state) => state.tasks.filters);
+  const isAdminOrSuperAdmin =
+    user?.roles.includes("admin") || user?.roles.includes("super_admin");
 
   const [showFilters, setShowFilters] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -68,9 +65,30 @@ function Tasks() {
     action: null,
   });
 
-  useEffect(() => {
-    dispatch(fetchTasks(filters));
-  }, [dispatch, filters]);
+useEffect(() => {
+  if (isAdminOrSuperAdmin) {
+    
+    // Admins and Super Admins fetch all tasks with specific statuses
+    dispatch(
+      fetchTasks({
+        ...filters,
+        status: ["archived", "not_started", "in_progress", "pending_approval", "done"],
+      })
+    );
+  } else {
+    // Other users fetch tasks from their department excluding archived
+    dispatch(
+      fetchTasks({
+        ...filters,
+        department: user.department, // Ensure user's department is included
+        status: filters.status !== "archived" ? filters.status : "", // Exclude archived tasks
+      })
+    );
+  }
+}, [dispatch, filters, isAdminOrSuperAdmin, user.department]);
+
+  
+  
 
   const handleCreateTask = () => {
     navigate("/tasks/create");
@@ -103,9 +121,12 @@ function Tasks() {
   };
 
   const handleFilterChange = (event) => {
-    setFilters({
-      ...filters,
-      [event.target.name]: event.target.value,
+    dispatch({
+      type: "tasks/updateFilters", // Adjust based on your Redux slice
+      payload: {
+        ...filters,
+        [event.target.name]: event.target.value,
+      },
     });
   };
 
@@ -195,6 +216,12 @@ function Tasks() {
           >
             Create Task
           </Button>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/archived-tasks")}
+          >
+            Show Archived Tasks
+          </Button>
         </Box>
       </Box>
 
@@ -206,7 +233,7 @@ function Tasks() {
                 fullWidth
                 label="Search"
                 name="searchTerm"
-                value={filters.searchTerm}
+                value={filters.searchTerm || ""}
                 onChange={handleFilterChange}
               />
             </Grid>
@@ -216,7 +243,7 @@ function Tasks() {
                 select
                 label="Status"
                 name="status"
-                value={filters.status}
+                value={filters.status || ""}
                 onChange={handleFilterChange}
               >
                 <MenuItem value="">All</MenuItem>
@@ -233,7 +260,7 @@ function Tasks() {
                 select
                 label="Department"
                 name="department"
-                value={filters.department}
+                value={filters.department || ""}
                 onChange={handleFilterChange}
               >
                 <MenuItem value="">All</MenuItem>
