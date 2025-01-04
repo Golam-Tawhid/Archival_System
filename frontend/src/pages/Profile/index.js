@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Paper,
@@ -20,8 +19,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
-} from "@mui/material";
+  ListItemIcon
+} from '@mui/material';
 import {
   Save as SaveIcon,
   Lock as LockIcon,
@@ -29,87 +28,83 @@ import {
   CalendarMonth as CalendarIcon,
   Badge as BadgeIcon,
   Email as EmailIcon,
-  Business as DepartmentIcon,
-} from "@mui/icons-material";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { updateProfile, updatePassword } from "../../store/slices/authSlice";
+  Business as DepartmentIcon
+} from '@mui/icons-material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { updateProfile, updatePassword } from '../../store/slices/authSlice';
 
 const validationSchema = Yup.object({
   name: Yup.string()
-    .required("Name is required")
-    .min(2, "Name should be of minimum 2 characters length"),
+    .required('Name is required')
+    .min(2, 'Name should be of minimum 2 characters length'),
   email: Yup.string()
-    .email("Enter a valid email")
-    .required("Email is required"),
+    .email('Enter a valid email')
+    .required('Email is required'),
 });
 
 const passwordValidationSchema = Yup.object({
-  currentPassword: Yup.string().required("Current password is required"),
+  currentPassword: Yup.string()
+    .required('Current password is required'),
   newPassword: Yup.string()
-    .min(6, "Password should be of minimum 6 characters length")
-    .required("New password is required"),
+    .min(6, 'Password should be of minimum 6 characters length')
+    .required('New password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
-    .required("Confirm password is required"),
+    .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+    .required('Confirm password is required'),
 });
 
 function Profile() {
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.auth);
   const [changePasswordDialog, setChangePasswordDialog] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
 
   const formik = useFormik({
     initialValues: {
-      name: user?.name || "",
-      email: user?.email || "",
+      name: user?.name || '',
+      email: user?.email || '',
       notificationPreferences: user?.notificationPreferences || {
         email: true,
-        inApp: true,
-      },
+        inApp: true
+      }
     },
     enableReinitialize: true, // Add this to update form when user data changes
     validationSchema,
     onSubmit: async (values) => {
       try {
         await dispatch(updateProfile(values)).unwrap();
-        setSuccessMessage("Profile updated successfully");
-        setTimeout(() => setSuccessMessage(""), 3000);
+        setSuccessMessage('Profile updated successfully');
+        setTimeout(() => setSuccessMessage(''), 3000);
       } catch (err) {
-        console.error("Failed to update profile:", err);
+        console.error('Failed to update profile:', err);
       }
     },
   });
 
   const passwordFormik = useFormik({
     initialValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
     },
     validationSchema: passwordValidationSchema,
     onSubmit: async (values) => {
       try {
         await dispatch(updatePassword(values)).unwrap();
         setChangePasswordDialog(false);
-        setSuccessMessage("Password updated successfully");
-        setTimeout(() => setSuccessMessage(""), 3000);
+        setSuccessMessage('Password updated successfully');
+        setTimeout(() => setSuccessMessage(''), 3000);
         passwordFormik.resetForm();
       } catch (err) {
-        console.error("Failed to update password:", err);
+        console.error('Failed to update password:', err);
       }
     },
   });
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
         <CircularProgress />
       </Box>
     );
@@ -117,12 +112,7 @@ function Profile() {
 
   if (!user) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
         <Typography>Failed to load profile data</Typography>
       </Box>
     );
@@ -148,13 +138,13 @@ function Profile() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, textAlign: "center" }}>
+          <Paper sx={{ p: 3, textAlign: 'center' }}>
             <Avatar
               sx={{
                 width: 100,
                 height: 100,
-                margin: "0 auto 16px",
-                bgcolor: "primary.main",
+                margin: '0 auto 16px',
+                bgcolor: 'primary.main'
               }}
             >
               {user?.name?.charAt(0)}
@@ -169,12 +159,12 @@ function Profile() {
               {user?.roles?.map((role) => (
                 <Chip
                   key={role}
-                  label={role.replace("_", " ").toUpperCase()}
+                  label={role.replace('_', ' ').toUpperCase()}
                   sx={{ m: 0.5 }}
                 />
               ))}
             </Box>
-            <List sx={{ mt: 2, textAlign: "left" }}>
+            <List sx={{ mt: 2, textAlign: 'left' }}>
               <ListItem>
                 <ListItemIcon>
                   <DepartmentIcon />
@@ -188,7 +178,10 @@ function Profile() {
                 <ListItemIcon>
                   <BadgeIcon />
                 </ListItemIcon>
-                <ListItemText primary="Employee ID" secondary={user?._id} />
+                <ListItemText
+                  primary="Employee ID"
+                  secondary={user?._id}
+                />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -244,7 +237,7 @@ function Profile() {
                     disabled={loading}
                     sx={{ mr: 2 }}
                   >
-                    {loading ? <CircularProgress size={24} /> : "Save Changes"}
+                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
                   </Button>
                   <Button
                     variant="outlined"
@@ -272,21 +265,11 @@ function Profile() {
                   secondary="Receive task updates and reminders via email"
                 />
                 <Button
-                  variant={
-                    formik.values.notificationPreferences?.email
-                      ? "contained"
-                      : "outlined"
-                  }
-                  onClick={() =>
-                    formik.setFieldValue(
-                      "notificationPreferences.email",
-                      !formik.values.notificationPreferences?.email
-                    )
-                  }
+                  variant={formik.values.notificationPreferences?.email ? "contained" : "outlined"}
+                  onClick={() => formik.setFieldValue('notificationPreferences.email', 
+                    !formik.values.notificationPreferences?.email)}
                 >
-                  {formik.values.notificationPreferences?.email
-                    ? "Enabled"
-                    : "Disabled"}
+                  {formik.values.notificationPreferences?.email ? 'Enabled' : 'Disabled'}
                 </Button>
               </ListItem>
               <ListItem>
@@ -298,21 +281,11 @@ function Profile() {
                   secondary="Receive notifications within the application"
                 />
                 <Button
-                  variant={
-                    formik.values.notificationPreferences?.inApp
-                      ? "contained"
-                      : "outlined"
-                  }
-                  onClick={() =>
-                    formik.setFieldValue(
-                      "notificationPreferences.inApp",
-                      !formik.values.notificationPreferences?.inApp
-                    )
-                  }
+                  variant={formik.values.notificationPreferences?.inApp ? "contained" : "outlined"}
+                  onClick={() => formik.setFieldValue('notificationPreferences.inApp',
+                    !formik.values.notificationPreferences?.inApp)}
                 >
-                  {formik.values.notificationPreferences?.inApp
-                    ? "Enabled"
-                    : "Disabled"}
+                  {formik.values.notificationPreferences?.inApp ? 'Enabled' : 'Disabled'}
                 </Button>
               </ListItem>
             </List>
@@ -340,14 +313,8 @@ function Profile() {
                   value={passwordFormik.values.currentPassword}
                   onChange={passwordFormik.handleChange}
                   onBlur={passwordFormik.handleBlur}
-                  error={
-                    passwordFormik.touched.currentPassword &&
-                    Boolean(passwordFormik.errors.currentPassword)
-                  }
-                  helperText={
-                    passwordFormik.touched.currentPassword &&
-                    passwordFormik.errors.currentPassword
-                  }
+                  error={passwordFormik.touched.currentPassword && Boolean(passwordFormik.errors.currentPassword)}
+                  helperText={passwordFormik.touched.currentPassword && passwordFormik.errors.currentPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -360,14 +327,8 @@ function Profile() {
                   value={passwordFormik.values.newPassword}
                   onChange={passwordFormik.handleChange}
                   onBlur={passwordFormik.handleBlur}
-                  error={
-                    passwordFormik.touched.newPassword &&
-                    Boolean(passwordFormik.errors.newPassword)
-                  }
-                  helperText={
-                    passwordFormik.touched.newPassword &&
-                    passwordFormik.errors.newPassword
-                  }
+                  error={passwordFormik.touched.newPassword && Boolean(passwordFormik.errors.newPassword)}
+                  helperText={passwordFormik.touched.newPassword && passwordFormik.errors.newPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -380,24 +341,16 @@ function Profile() {
                   value={passwordFormik.values.confirmPassword}
                   onChange={passwordFormik.handleChange}
                   onBlur={passwordFormik.handleBlur}
-                  error={
-                    passwordFormik.touched.confirmPassword &&
-                    Boolean(passwordFormik.errors.confirmPassword)
-                  }
-                  helperText={
-                    passwordFormik.touched.confirmPassword &&
-                    passwordFormik.errors.confirmPassword
-                  }
+                  error={passwordFormik.touched.confirmPassword && Boolean(passwordFormik.errors.confirmPassword)}
+                  helperText={passwordFormik.touched.confirmPassword && passwordFormik.errors.confirmPassword}
                 />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setChangePasswordDialog(false)}>
-              Cancel
-            </Button>
+            <Button onClick={() => setChangePasswordDialog(false)}>Cancel</Button>
             <Button type="submit" variant="contained" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Update Password"}
+              {loading ? <CircularProgress size={24} /> : 'Update Password'}
             </Button>
           </DialogActions>
         </form>

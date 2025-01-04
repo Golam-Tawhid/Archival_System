@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
   Box,
   Paper,
@@ -17,42 +17,43 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
-  IconButton,
-  Chip,
-} from "@mui/material";
+  IconButton
+} from '@mui/material';
 import {
   CloudUpload as UploadIcon,
   Delete as DeleteIcon,
-  ArrowBack as BackIcon,
-} from "@mui/icons-material";
-import { createTask } from "../../store/slices/tasksSlice";
+  ArrowBack as BackIcon
+} from '@mui/icons-material';
+import { createTask } from '../../store/slices/tasksSlice';
 
 const validationSchema = Yup.object({
   title: Yup.string()
-    .required("Title is required")
-    .min(3, "Title should be at least 3 characters"),
+    .required('Title is required')
+    .min(3, 'Title should be at least 3 characters'),
   description: Yup.string()
-    .required("Description is required")
-    .min(10, "Description should be at least 10 characters"),
-  department: Yup.string().required("Department is required"),
-  priority: Yup.string().required("Priority is required"),
+    .required('Description is required')
+    .min(10, 'Description should be at least 10 characters'),
+  department: Yup.string()
+    .required('Department is required'),
+  priority: Yup.string()
+    .required('Priority is required'),
   due_date: Yup.date()
-    .min(new Date(), "Due date cannot be in the past")
-    .required("Due date is required"),
+    .min(new Date(), 'Due date cannot be in the past')
+    .required('Due date is required')
 });
 
 const departments = [
-  { value: "CSE", label: "Computer Science and Engineering" },
-  { value: "ECE", label: "Electronics and Communication Engineering" },
-  { value: "ME", label: "Mechanical Engineering" },
-  { value: "RESEARCH", label: "Research" },
-  { value: "ADMIN", label: "Administration" },
+  { value: 'CSE', label: 'Computer Science and Engineering' },
+  { value: 'ECE', label: 'Electronics and Communication Engineering' },
+  { value: 'ME', label: 'Mechanical Engineering' },
+  { value: 'RESEARCH', label: 'Research' },
+  { value: 'ADMIN', label: 'Administration' }
 ];
 
 const priorities = [
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' }
 ];
 
 function CreateTask() {
@@ -65,36 +66,33 @@ function CreateTask() {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      department: user?.department || "",
-      priority: "medium",
-      due_date: "",
-      tags: "",
+      title: '',
+      description: '',
+      department: user?.department || '',
+      priority: 'medium',
+      due_date: '',
+      tags: ''
     },
     validationSchema,
     onSubmit: async (values) => {
       const formData = new FormData();
-      Object.keys(values).forEach((key) => {
-        if (key === "tags") {
-          formData.append(
-            key,
-            values[key].split(",").map((tag) => tag.trim())
-          );
+      Object.keys(values).forEach(key => {
+        if (key === 'tags') {
+          formData.append(key, values[key].split(',').map(tag => tag.trim()));
         } else {
           formData.append(key, values[key]);
         }
       });
-
-      files.forEach((file) => {
-        formData.append("attachments", file);
+      
+      files.forEach(file => {
+        formData.append('attachments', file);
       });
 
       try {
         await dispatch(createTask(formData)).unwrap();
-        navigate("/tasks");
+        navigate('/tasks');
       } catch (err) {
-        console.error("Failed to create task:", err);
+        console.error('Failed to create task:', err);
       }
     },
   });
@@ -102,10 +100,10 @@ function CreateTask() {
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const invalidFiles = newFiles.filter((file) => file.size > maxSize);
+    const invalidFiles = newFiles.filter(file => file.size > maxSize);
 
     if (invalidFiles.length > 0) {
-      setUploadError("Some files exceed the 5MB size limit");
+      setUploadError('Some files exceed the 5MB size limit');
       return;
     }
 
@@ -118,12 +116,16 @@ function CreateTask() {
   };
 
   const handleBack = () => {
-    navigate("/tasks");
+    navigate('/tasks');
   };
 
   return (
     <Box>
-      <Button startIcon={<BackIcon />} onClick={handleBack} sx={{ mb: 3 }}>
+      <Button
+        startIcon={<BackIcon />}
+        onClick={handleBack}
+        sx={{ mb: 3 }}
+      >
         Back to Tasks
       </Button>
 
@@ -165,13 +167,8 @@ function CreateTask() {
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.description &&
-                  Boolean(formik.errors.description)
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                }
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
               />
             </Grid>
 
@@ -185,12 +182,8 @@ function CreateTask() {
                 value={formik.values.department}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.department && Boolean(formik.errors.department)
-                }
-                helperText={
-                  formik.touched.department && formik.errors.department
-                }
+                error={formik.touched.department && Boolean(formik.errors.department)}
+                helperText={formik.touched.department && formik.errors.department}
               >
                 {departments.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -210,9 +203,7 @@ function CreateTask() {
                 value={formik.values.priority}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.priority && Boolean(formik.errors.priority)
-                }
+                error={formik.touched.priority && Boolean(formik.errors.priority)}
                 helperText={formik.touched.priority && formik.errors.priority}
               >
                 {priorities.map((option) => (
@@ -233,9 +224,7 @@ function CreateTask() {
                 value={formik.values.due_date}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.due_date && Boolean(formik.errors.due_date)
-                }
+                error={formik.touched.due_date && Boolean(formik.errors.due_date)}
                 helperText={formik.touched.due_date && formik.errors.due_date}
                 InputLabelProps={{
                   shrink: true,
@@ -310,9 +299,13 @@ function CreateTask() {
                 disabled={loading}
                 sx={{ mr: 2 }}
               >
-                {loading ? <CircularProgress size={24} /> : "Create Task"}
+                {loading ? <CircularProgress size={24} /> : 'Create Task'}
               </Button>
-              <Button variant="outlined" size="large" onClick={handleBack}>
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={handleBack}
+              >
                 Cancel
               </Button>
             </Grid>
