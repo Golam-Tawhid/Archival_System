@@ -18,6 +18,7 @@ import Reports from './pages/Reports';
 import UserManagement from './pages/UserManagement';
 import Profile from './pages/Profile';
 import QueryManagement from './pages/QueryManagement';
+import ArchivedTasks from './pages/ArchivedTasks/ArchivedTasks';
 
 function App() {
   const dispatch = useDispatch();
@@ -82,6 +83,11 @@ function App() {
               </PrivateRoute>
             } />
             
+            <Route path="/archived-tasks" element={
+              <PrivateRoute>
+                <ArchivedTasks />
+              </PrivateRoute>
+            } />
             <Route path="/profile" element={
               <PrivateRoute>
                 <Profile />
