@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Paper,
@@ -13,40 +13,36 @@ import {
   CardContent,
   CardActions,
   Chip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogActions,
   CircularProgress,
   Tooltip,
-} from "@mui/material";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
+} from '@mui/material';
 import {
   Add as AddIcon,
   FilterList as FilterIcon,
   CheckCircle as ApproveIcon,
-  Archive as ArchiveIcon,
-} from "@mui/icons-material";
-import {
-  fetchTasks,
-  updateTask,
-  approveTask,
-  archiveTask,
-} from "../../store/slices/tasksSlice";
+  Archive as ArchiveIcon
+} from '@mui/icons-material';
+import { fetchTasks, approveTask, archiveTask } from '../../store/slices/tasksSlice';
 
 const statusOptions = [
-  { value: "not_started", label: "Not Started" },
-  { value: "in_progress", label: "In Progress" },
-  { value: "pending_approval", label: "Pending Approval" },
-  { value: "done", label: "Done" },
-  { value: "archived", label: "Archived" },
+  { value: 'not_started', label: 'Not Started' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'pending_approval', label: 'Pending Approval' },
+  { value: 'done', label: 'Done' },
+  { value: 'archived', label: 'Archived' }
 ];
 
 const departments = [
-  { value: "CSE", label: "Computer Science and Engineering" },
-  { value: "ECE", label: "Electronics and Communication Engineering" },
-  { value: "ME", label: "Mechanical Engineering" },
-  { value: "RESEARCH", label: "Research" },
-  { value: "ADMIN", label: "Administration" },
+  { value: 'CSE', label: 'Computer Science and Engineering' },
+  { value: 'ECE', label: 'Electronics and Communication Engineering' },
+  { value: 'ME', label: 'Mechanical Engineering' },
+  { value: 'RESEARCH', label: 'Research' },
+  { value: 'ADMIN', label: 'Administration' }
 ];
 
 function Tasks() {
@@ -54,18 +50,19 @@ function Tasks() {
   const navigate = useNavigate();
   const { items: tasks, loading } = useSelector((state) => state.tasks);
   const { user } = useSelector((state) => state.auth);
-
+  
   const [filters, setFilters] = useState({
-    status: "",
-    department: user?.department || "",
-    searchTerm: "",
+    status: '',
+    department: user?.department || '',
+    searchTerm: ''
   });
-
+  
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     open: false,
-    title: "",
-    action: null,
+    title: '',
+    action: null
   });
 
   useEffect(() => {
@@ -73,7 +70,7 @@ function Tasks() {
   }, [dispatch, filters]);
 
   const handleCreateTask = () => {
-    navigate("/tasks/create");
+    navigate('/tasks/create');
   };
 
   const handleEditTask = (taskId) => {
@@ -83,84 +80,62 @@ function Tasks() {
   const handleApproveTask = (taskId) => {
     setConfirmDialog({
       open: true,
-      title: "Are you sure you want to approve this task?",
+      title: 'Are you sure you want to approve this task?',
       action: () => {
         dispatch(approveTask(taskId));
-        setConfirmDialog({ open: false, title: "", action: null });
-      },
+        setConfirmDialog({ open: false, title: '', action: null });
+      }
     });
   };
 
   const handleArchiveTask = (taskId) => {
     setConfirmDialog({
       open: true,
-      title: "Are you sure you want to archive this task?",
+      title: 'Are you sure you want to archive this task?',
       action: () => {
         dispatch(archiveTask(taskId));
-        setConfirmDialog({ open: false, title: "", action: null });
-      },
+        setConfirmDialog({ open: false, title: '', action: null });
+      }
     });
   };
 
   const handleFilterChange = (event) => {
     setFilters({
       ...filters,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleUpdateTask = (taskId, newStatus) => {
-    setConfirmDialog({
-      open: true,
-      title: "Are you sure you want to change the status of this task?",
-      action: () => {
-        const updatedTaskData = {
-          status: newStatus,
-        };
-        dispatch(updateTask({ taskId, data: updatedTaskData }));
-        setConfirmDialog({ open: false, title: "", action: null });
-      },
+      [event.target.name]: event.target.value
     });
   };
 
   const canApprove = (task) => {
-    return (
-      user?.permissions?.includes("approve_task") &&
-      task.status === "pending_approval"
-    );
+    return user?.permissions?.includes('approve_task') &&
+           task.status === 'pending_approval';
   };
 
   const canArchive = (task) => {
-    return (
-      user?.permissions?.includes("access_archives") && task.status === "done"
-    );
+    return user?.permissions?.includes('access_archives') &&
+           task.status === 'done';
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "not_started":
-        return "default";
-      case "in_progress":
-        return "primary";
-      case "pending_approval":
-        return "warning";
-      case "done":
-        return "success";
-      case "archived":
-        return "error";
+      case 'not_started':
+        return 'default';
+      case 'in_progress':
+        return 'primary';
+      case 'pending_approval':
+        return 'warning';
+      case 'done':
+        return 'success';
+      case 'archived':
+        return 'error';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
         <CircularProgress />
       </Box>
     );
@@ -168,14 +143,7 @@ function Tasks() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
           Tasks
         </Typography>
@@ -258,7 +226,7 @@ function Tasks() {
                 </Typography>
                 <Box sx={{ mt: 1, mb: 2 }}>
                   <Chip
-                    label={task.status.replace("_", " ").toUpperCase()}
+                    label={task.status.replace('_', ' ').toUpperCase()}
                     color={getStatusColor(task.status)}
                     size="small"
                     sx={{ mr: 1 }}
@@ -269,15 +237,8 @@ function Tasks() {
                     size="small"
                   />
                 </Box>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  {task.description
-                    ? task.description.substring(0, 100)
-                    : "No description available"}
-                  ...
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  {task.description.substring(0, 100)}...
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   Created by: {task.created_by}
@@ -287,19 +248,6 @@ function Tasks() {
                 <Button size="small" onClick={() => handleEditTask(task._id)}>
                   View Details
                 </Button>
-                <TextField
-                  select
-                  label="Status"
-                  value={task.status}
-                  onChange={(e) => handleUpdateTask(task._id, e.target.value)}
-                  sx={{ mr: 1 }}
-                >
-                  {statusOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
                 {canApprove(task) && (
                   <Tooltip title="Approve Task">
                     <IconButton
@@ -330,24 +278,14 @@ function Tasks() {
 
       <Dialog
         open={confirmDialog.open}
-        onClose={() =>
-          setConfirmDialog({ open: false, title: "", action: null })
-        }
+        onClose={() => setConfirmDialog({ open: false, title: '', action: null })}
       >
         <DialogTitle>{confirmDialog.title}</DialogTitle>
         <DialogActions>
-          <Button
-            onClick={() =>
-              setConfirmDialog({ open: false, title: "", action: null })
-            }
-          >
+          <Button onClick={() => setConfirmDialog({ open: false, title: '', action: null })}>
             Cancel
           </Button>
-          <Button
-            onClick={confirmDialog.action}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={confirmDialog.action} variant="contained" color="primary">
             Confirm
           </Button>
         </DialogActions>

@@ -1,7 +1,5 @@
 from datetime import datetime
 from bson import ObjectId
-from app.utils import has_permission
-# Removed redundant import
 
 class Task:
     STATUS = {
@@ -62,7 +60,7 @@ class Task:
         update_data = {'updated_at': datetime.utcnow()}
         change_log = []
 
-        # Track changes for each field, including status change
+        # Track changes for each field
         trackable_fields = ['status', 'assigned_to', 'priority', 'description', 'due_date']
         for field in trackable_fields:
             if field in data and data[field] != current_task.get(field):
@@ -84,9 +82,9 @@ class Task:
         if 'attachments' in data:
             update_data['attachments'] = current_task.get('attachments', []) + data['attachments']
 
-        # Set the change log entries directly
+        # Append new change log entries
         if change_log:
-            update_data['change_log'] = current_task.get('change_log', []) + change_log
+            update_data['$push'] = {'change_log': {'$each': change_log}}
 
         result = self.collection.update_one(
             {'_id': ObjectId(task_id)},
@@ -95,15 +93,10 @@ class Task:
         
         return self.get_task_by_id(task_id) if result.modified_count > 0 else None
 
-    def get_department_tasks(self, department, status=None, user=None, exclude_archived=False):
-        if user and has_permission(user, 'view_all_tasks'):
-            query = {}
-        else:
-            query = {'department': department}
+    def get_department_tasks(self, department, status=None):
+        query = {'department': department}
         if status:
             query['status'] = status
-        if exclude_archived:
-            query['status'] = {'$ne': self.STATUS['ARCHIVED']}
         
         tasks = list(self.collection.find(query).sort('created_at', -1))
         for task in tasks:
@@ -168,12 +161,10 @@ class Task:
             'status': self.STATUS['ARCHIVED']
         }, user_id)
 
-    def get_tasks_by_status(self, status, department=None, exclude_archived=False):
+    def get_tasks_by_status(self, status, department=None):
         query = {'status': status}
         if department:
             query['department'] = department
-        if exclude_archived and status != self.STATUS['ARCHIVED']:
-            query['status'] = {'$ne': self.STATUS['ARCHIVED']}
             
         tasks = list(self.collection.find(query).sort('created_at', -1))
         for task in tasks:
