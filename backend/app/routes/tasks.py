@@ -202,6 +202,10 @@ def get_archived_tasks():
     current_user = user_model.get_user_by_id(current_user_id)
 
     task_model = Task(tasks_bp.db)
+    print(f"Current User Roles: {current_user.get('roles')}, Permissions: {current_user.get('permissions')}")  # Log user roles and permissions
+    if not (has_permission(current_user, 'view_all_tasks') or 'admin' in current_user.get('roles', []) or 'super_admin' in current_user.get('roles', [])):
+        return jsonify({'error': 'Permission denied'}), 403
+
     tasks = task_model.get_tasks_by_status(Task.STATUS['ARCHIVED'])
 
     return jsonify(tasks), 200
