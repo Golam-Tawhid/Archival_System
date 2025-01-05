@@ -22,4 +22,13 @@ class Comment:
         for comment in comments:
             comment['_id'] = str(comment['_id'])
             comment['user_id'] = str(comment['user_id'])  # Convert user_id to string for easier handling
-        return comments
+        return [
+            {
+                '_id': str(comment['_id']),
+                'task_id': str(comment['task_id']),
+                'user_id': str(comment['user_id']),
+                'comment_text': comment['comment_text'],
+                'created_at': comment['created_at'],
+            }
+            for comment in comments
+        ]

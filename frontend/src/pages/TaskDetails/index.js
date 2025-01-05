@@ -392,7 +392,7 @@ function TaskDetails() {
           {comments.map((comment) => (
             <ListItem key={comment._id}>
               <ListItemText
-                primary={comment.text}
+                primary={comment.comment_text}
                 secondary={`By ${
                   comment.createdBy?.name || "Unknown"
                 } on ${new Date(comment.createdAt).toLocaleString()}`}

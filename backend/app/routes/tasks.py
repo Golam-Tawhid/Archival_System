@@ -56,6 +56,19 @@ def get_comments(task_id):
 
     comment_model = Comment(tasks_bp.db)
     comments = comment_model.get_comments_by_task_id(task_id)
+    comments = [
+        {
+            '_id': str(comment['_id']),
+            'task_id': str(comment['task_id']),
+            'user_id': str(comment['user_id']),
+            'comment_text': comment['comment_text'],
+            'createdBy': {
+                'name': user_model.get_user_by_id(str(comment['user_id']))['name']
+            },
+            'created_at': comment['created_at'],
+        }
+        for comment in comments
+    ]
     return jsonify(comments), 200
     current_user = user_model.get_user_by_id(current_user_id)
     
