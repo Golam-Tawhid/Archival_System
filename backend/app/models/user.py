@@ -25,7 +25,7 @@ class User:
     def create_user(self, data):
         user = {
             'email': data['email'],
-            'password': data['password'],  # Should be hashed before storing
+            'password': data['password'],
             'name': data['name'],
             'department': data['department'],
             'roles': data.get('roles', ['staff']),
