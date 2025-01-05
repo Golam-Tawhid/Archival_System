@@ -1,0 +1,27 @@
+2025-01-05 12:55:49,459 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.108:5000
+2025-01-05 12:55:49,461 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-05 12:55:49,464 - INFO -  * Restarting with stat
+2025-01-05 12:55:50,104 - WARNING -  * Debugger is active!
+2025-01-05 12:55:50,110 - INFO -  * Debugger PIN: 846-401-387
+2025-01-05 12:56:29,481 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:29] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-01-05 12:56:29,483 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:29] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-01-05 12:56:29,797 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:29] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2025-01-05 12:56:29,966 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:29] "OPTIONS /api/auth/refresh HTTP/1.1" 200 -
+2025-01-05 12:56:30,060 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:30] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2025-01-05 12:56:30,109 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:30] "POST /api/auth/refresh HTTP/1.1" 200 -
+2025-01-05 12:56:30,280 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:30] "POST /api/auth/refresh HTTP/1.1" 200 -
+2025-01-05 12:56:30,406 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:30] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2025-01-05 12:56:30,516 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:30] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2025-01-05 12:56:39,571 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:39] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-01-05 12:56:39,851 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:39] "POST /api/auth/login HTTP/1.1" 200 -
+2025-01-05 12:56:39,893 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:39] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2025-01-05 12:56:40,207 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:40] "OPTIONS /api/tasks HTTP/1.1" 200 -
+2025-01-05 12:56:40,209 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:40] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2025-01-05 12:56:40,473 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:40] "[31m[1mGET /api/tasks HTTP/1.1[0m" 405 -
+2025-01-05 12:56:44,916 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:44] "OPTIONS /api/tasks/department/CSE HTTP/1.1" 200 -
+2025-01-05 12:56:44,918 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:44] "OPTIONS /api/tasks/department/CSE HTTP/1.1" 200 -
+2025-01-05 12:56:44,981 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:44] "GET /api/tasks/department/CSE HTTP/1.1" 200 -
+2025-01-05 12:56:45,296 - INFO - 127.0.0.1 - - [05/Jan/2025 12:56:45] "GET /api/tasks/department/CSE HTTP/1.1" 200 -

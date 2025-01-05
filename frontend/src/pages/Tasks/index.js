@@ -238,7 +238,7 @@ function Tasks() {
                   />
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  {task.description.substring(0, 100)}...
+                  {task?.description ? `${task.description.substring(0, 100)}...` : 'No description available'}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   Created by: {task.created_by}

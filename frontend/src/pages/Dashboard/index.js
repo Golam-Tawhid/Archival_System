@@ -55,10 +55,10 @@ const RecentTaskCard = ({ task, onViewClick }) => (
         />
       </Box>
       <Typography color="text.secondary" gutterBottom>
-        Department: {task.department}
+        Department: {task.department || 'N/A'}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        {task.description.substring(0, 100)}...
+        {(task.description || 'No description available').substring(0, 100)}...
       </Typography>
       <Button size="small" onClick={() => onViewClick(task._id)}>
         View Details
