@@ -1,8 +1,6 @@
 from datetime import datetime
 from bson import ObjectId
 from app.utils import has_permission
-# Removed redundant import
-
 class Task:
     STATUS = {
         'NOT_STARTED': 'not_started',
@@ -15,8 +13,10 @@ class Task:
     def __init__(self, db):
         self.db = db
         self.collection = db.tasks
+        self.comments_collection = db.comments  # Add reference to comments collection
 
     def create_task(self, data):
+        data['comments'] = []  # Initialize comments as an empty list
         task = {
             'title': data['title'],
             'description': data['description'],
@@ -41,8 +41,47 @@ class Task:
         result = self.collection.insert_one(task)
         task['_id'] = str(result.inserted_id)
         return task
+class Task:
+    STATUS = {
+        'NOT_STARTED': 'not_started',
+        'IN_PROGRESS': 'in_progress',
+        'PENDING_APPROVAL': 'pending_approval',
+        'DONE': 'done',
+        'ARCHIVED': 'archived'
+    }
 
-    def get_task_by_id(self, task_id):
+    def __init__(self, db):
+        self.db = db
+        self.collection = db.tasks
+        self.comments_collection = db.comments  # Add reference to comments collection
+
+    def create_task(self, data):
+        data['comments'] = []  # Initialize comments as an empty list
+        task = {
+            'title': data['title'],
+            'description': data['description'],
+            'department': data['department'],
+            'created_by': data['created_by'],  # User ID
+            'assigned_to': data.get('assigned_to', None),  # User ID or None
+            'status': data.get('status', self.STATUS['NOT_STARTED']),
+            'priority': data.get('priority', 'medium'),
+            'due_date': data.get('due_date', None),
+            'attachments': data.get('attachments', []),
+            'tags': data.get('tags', []),  # Initialize tags as empty array if not provided
+            'created_at': datetime.utcnow(),
+            'updated_at': datetime.utcnow(),
+            'change_log': [{
+                'field': 'status',
+                'old_value': None,
+                'new_value': self.STATUS['NOT_STARTED'],
+                'changed_by': data['created_by'],
+                'changed_at': datetime.utcnow()
+            }]
+        }
+        result = self.collection.insert_one(task)
+        task['_id'] = str(result.inserted_id)
+        return task
+    
         try:
             task = self.collection.find_one({'_id': ObjectId(task_id)})
             if task:
@@ -62,7 +101,7 @@ class Task:
         update_data = {'updated_at': datetime.utcnow()}
         change_log = []
 
-        # Track changes for each field
+        # Track changes for each field, including status change
         trackable_fields = ['status', 'assigned_to', 'priority', 'description', 'due_date']
         for field in trackable_fields:
             if field in data and data[field] != current_task.get(field):
@@ -84,9 +123,9 @@ class Task:
         if 'attachments' in data:
             update_data['attachments'] = current_task.get('attachments', []) + data['attachments']
 
-        # Append new change log entries
+        # Set the change log entries directly
         if change_log:
-            update_data['$push'] = {'change_log': {'$each': change_log}}
+            update_data['change_log'] = current_task.get('change_log', []) + change_log
 
         result = self.collection.update_one(
             {'_id': ObjectId(task_id)},
@@ -95,10 +134,15 @@ class Task:
         
         return self.get_task_by_id(task_id) if result.modified_count > 0 else None
 
-    def get_department_tasks(self, department, status=None):
-        query = {'department': department}
+    def get_department_tasks(self, department, status=None, user=None, exclude_archived=False):
+        if user and has_permission(user, 'view_all_tasks'):
+            query = {}
+        else:
+            query = {'department': department}
         if status:
             query['status'] = status
+        if exclude_archived:
+            query['status'] = {'$ne': self.STATUS['ARCHIVED']}
         
         tasks = list(self.collection.find(query).sort('created_at', -1))
         for task in tasks:
@@ -163,10 +207,12 @@ class Task:
             'status': self.STATUS['ARCHIVED']
         }, user_id)
 
-    def get_tasks_by_status(self, status, department=None):
+    def get_tasks_by_status(self, status, department=None, exclude_archived=False):
         query = {'status': status}
         if department:
             query['department'] = department
+        if exclude_archived and status != self.STATUS['ARCHIVED']:
+            query['status'] = {'$ne': self.STATUS['ARCHIVED']}
             
         tasks = list(self.collection.find(query).sort('created_at', -1))
         for task in tasks:
