@@ -15,7 +15,6 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -32,6 +31,7 @@ import {
   Archive as ArchiveIcon,
   AttachFile as AttachmentIcon,
   History as HistoryIcon,
+  Comment as CommentIcon,
 } from "@mui/icons-material";
 import {
   updateTask,
@@ -64,11 +64,12 @@ function TaskDetails() {
     title: "",
     action: null,
   });
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     const foundTask = tasks.find((t) => t._id === taskId);
     if (foundTask) {
-      // Ensure tags is always an array
       const taskWithTags = {
         ...foundTask,
         tags: foundTask.tags || [],
@@ -77,6 +78,15 @@ function TaskDetails() {
       setEditedTask(taskWithTags);
     }
   }, [taskId, tasks]);
+
+  useEffect(() => {
+    if (taskId) {
+      dispatch(fetchComments(taskId))
+        .unwrap()
+        .then((data) => setComments(data))
+        .catch((err) => console.error("Failed to fetch comments:", err));
+    }
+  }, [taskId, dispatch]);
 
   const handleBack = () => {
     navigate("/tasks");
@@ -137,6 +147,20 @@ function TaskDetails() {
         }
       },
     });
+  };
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return;
+
+    try {
+      const newComment = await dispatch(
+        addComment({ taskId, text: commentText })
+      ).unwrap();
+      setComments((prev) => [newComment, ...prev]);
+      setCommentText("");
+    } catch (err) {
+      console.error("Failed to add comment:", err);
+    }
   };
 
   const canEdit = () => {
@@ -339,6 +363,43 @@ function TaskDetails() {
             </Grid>
           )}
         </Grid>
+      </Paper>
+
+      {/* Comment Section */}
+      <Paper sx={{ p: 3, mt: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Comments
+        </Typography>
+        <Box sx={{ mb: 3 }}>
+          <TextField
+            fullWidth
+            multiline
+            rows={3}
+            label="Add a comment"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            startIcon={<CommentIcon />}
+            onClick={handleAddComment}
+            sx={{ mt: 2 }}
+          >
+            Add Comment
+          </Button>
+        </Box>
+        <List>
+          {comments.map((comment) => (
+            <ListItem key={comment._id}>
+              <ListItemText
+                primary={comment.text}
+                secondary={`By ${
+                  comment.createdBy?.name || "Unknown"
+                } on ${new Date(comment.createdAt).toLocaleString()}`}
+              />
+            </ListItem>
+          ))}
+        </List>
       </Paper>
 
       <Dialog
