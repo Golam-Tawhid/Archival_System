@@ -1,0 +1,12 @@
+2025-01-05 19:07:09,493 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.108:5000
+2025-01-05 19:07:09,495 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-05 19:07:09,497 - INFO -  * Restarting with stat
+2025-01-05 19:07:10,207 - WARNING -  * Debugger is active!
+2025-01-05 19:07:10,212 - INFO -  * Debugger PIN: 846-401-387
+2025-01-05 19:07:25,012 - INFO - 127.0.0.1 - - [05/Jan/2025 19:07:25] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-01-05 19:07:25,593 - INFO - 127.0.0.1 - - [05/Jan/2025 19:07:25] "POST /api/auth/login HTTP/1.1" 200 -
+2025-01-05 19:07:25,642 - INFO - 127.0.0.1 - - [05/Jan/2025 19:07:25] "[33mOPTIONS /api/tasks HTTP/1.1[0m" 404 -
+2025-01-05 19:07:25,961 - INFO - 127.0.0.1 - - [05/Jan/2025 19:07:25] "[33mOPTIONS /api/tasks HTTP/1.1[0m" 404 -

@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models.task import Task
-from app.models.user import User
-from app.models.comment import Comment  # Import the Comment model
-from app.utils import has_permission
+from ..models.task import Task
+from ..models.user import User
+from ..models.comment import Comment  # Import the Comment model
+from ..utils import has_permission
 from datetime import datetime
 import json
 
