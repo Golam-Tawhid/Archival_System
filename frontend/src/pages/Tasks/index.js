@@ -59,7 +59,6 @@ function Tasks() {
     user?.roles.includes("admin") || user?.roles.includes("super_admin");
 
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     open: false,
     title: "",
