@@ -6,25 +6,15 @@ from ..models.comment import Comment  # Import the Comment model
 from ..utils import has_permission
 from datetime import datetime
 import json
+import logging
 
 tasks_bp = Blueprint('tasks', __name__, url_prefix='/api/tasks')
 
 # Initialize db attribute
 tasks_bp.db = None
 
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models.task import Task
-from app.models.user import User
-from app.models.comment import Comment  # Import the Comment model
-from app.utils import has_permission
-from datetime import datetime
-import json
-
-tasks_bp = Blueprint('tasks', __name__, url_prefix='/api/tasks')
-
-# Initialize db attribute
-tasks_bp.db = None
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
 def has_permission(user, permission):
     return permission in user.get('permissions', [])
@@ -70,6 +60,41 @@ def get_comments(task_id):
         for comment in comments
     ]
     return jsonify(comments), 200
+
+@tasks_bp.route('/', methods=['POST'])
+@jwt_required()  # Added the jwt_required decorator here
+def create_task():
+    logging.info("Create task endpoint hit")
+    current_user_id = get_jwt_identity()
+    user_model = User(tasks_bp.db)
+    current_user = user_model.get_user_by_id(current_user_id)
+    
+    if not has_permission(current_user, 'create_task'):
+        return jsonify({'error': 'Permission denied'}), 403
+    
+    data = request.get_json()
+    logging.info(f"Request data: {data}")
+    
+    required_fields = ['title', 'description', 'department']
+    if not all(field in data for field in required_fields):
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    # Add creator information
+    data['created_by'] = current_user_id
+    
+    task_model = Task(tasks_bp.db)
+    try:
+        task = task_model.create_task(data)
+        return jsonify(task), 201
+    except Exception as e:
+        logging.error(f"Error creating task: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@tasks_bp.route('/<task_id>', methods=['GET'])
+@jwt_required()
+def get_task(task_id):
+    current_user_id = get_jwt_identity()
+    user_model = User(tasks_bp.db)
     current_user = user_model.get_user_by_id(current_user_id)
     
     task_model = Task(tasks_bp.db)
@@ -114,8 +139,6 @@ def get_department_tasks(department):
     current_user_id = get_jwt_identity()
     user_model = User(tasks_bp.db)
     current_user = user_model.get_user_by_id(current_user_id)
-    print(f"Current User Roles: {current_user.get('roles')}, Permissions: {current_user.get('permissions')}")
-
     
     if not (has_permission(current_user, 'view_all_tasks') or
             current_user['department'] == department):

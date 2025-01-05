@@ -41,47 +41,19 @@ class Task:
         result = self.collection.insert_one(task)
         task['_id'] = str(result.inserted_id)
         return task
-class Task:
-    STATUS = {
-        'NOT_STARTED': 'not_started',
-        'IN_PROGRESS': 'in_progress',
-        'PENDING_APPROVAL': 'pending_approval',
-        'DONE': 'done',
-        'ARCHIVED': 'archived'
-    }
-
-    def __init__(self, db):
-        self.db = db
-        self.collection = db.tasks
-        self.comments_collection = db.comments  # Add reference to comments collection
-
-    def create_task(self, data):
-        data['comments'] = []  # Initialize comments as an empty list
-        task = {
-            'title': data['title'],
-            'description': data['description'],
-            'department': data['department'],
-            'created_by': data['created_by'],  # User ID
-            'assigned_to': data.get('assigned_to', None),  # User ID or None
-            'status': data.get('status', self.STATUS['NOT_STARTED']),
-            'priority': data.get('priority', 'medium'),
-            'due_date': data.get('due_date', None),
-            'attachments': data.get('attachments', []),
-            'tags': data.get('tags', []),  # Initialize tags as empty array if not provided
-            'created_at': datetime.utcnow(),
-            'updated_at': datetime.utcnow(),
-            'change_log': [{
-                'field': 'status',
-                'old_value': None,
-                'new_value': self.STATUS['NOT_STARTED'],
-                'changed_by': data['created_by'],
-                'changed_at': datetime.utcnow()
-            }]
-        }
-        result = self.collection.insert_one(task)
-        task['_id'] = str(result.inserted_id)
-        return task
     
+        try:
+            task = self.collection.find_one({'_id': ObjectId(task_id)})
+            if task:
+                task['_id'] = str(task['_id'])
+                # Ensure tags is always an array
+                if 'tags' not in task:
+                    task['tags'] = []
+            return task
+        except:
+            return None
+        
+    def get_task_by_id(self, task_id):
         try:
             task = self.collection.find_one({'_id': ObjectId(task_id)})
             if task:

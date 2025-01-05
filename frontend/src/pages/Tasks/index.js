@@ -308,6 +308,19 @@ function Tasks() {
                   Created by: {task.created_by}
                 </Typography>
               </CardContent>
+              <TextField
+                select
+                label="Status"
+                value={task.status}
+                onChange={(e) => handleUpdateTask(task._id, e.target.value)}
+                sx={{ mr: 1 }}
+              >
+                {statusOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <CardActions>
                 <Button size="small" onClick={() => handleEditTask(task._id)}>
                   View Details
