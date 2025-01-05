@@ -10,7 +10,6 @@ import {
   TextField,
   MenuItem,
   Chip,
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -37,7 +36,6 @@ import {
   updateTask,
   approveTask,
   archiveTask,
-  fetchTask,
   addComment,
   fetchComments,
 } from "../../store/slices/tasksSlice";
