@@ -13,8 +13,8 @@ tasks_bp.db = None
 def has_permission(user, permission):
     return permission in user.get('permissions', [])
 
-@tasks_bp.route('', methods=['POST'])  # No trailing slash
-@tasks_bp.route('/', methods=['POST'])  # With trailing slash
+@tasks_bp.route('', methods=['POST'])
+@tasks_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_task():
     current_user_id = get_jwt_identity()
@@ -61,7 +61,7 @@ def get_task(task_id):
     
     return jsonify(task), 200
 
-@tasks_bp.route('/<task_id>', methods=['PUT'])
+@tasks_bp.route('/<task_id>', methods=['PUT','POST','DELETE'])
 @jwt_required()
 def update_task(task_id):
     current_user_id = get_jwt_identity()
@@ -185,4 +185,20 @@ def archive_task(task_id):
     if not task:
         return jsonify({'error': 'Failed to archive task'}), 500
     
-    return jsonify(task), 200
+    return jsonify(archived_task), 200
+
+@tasks_bp.route('/archived', methods=['GET'])
+@jwt_required()
+def get_archived_tasks():
+    current_user_id = get_jwt_identity()
+    user_model = User(tasks_bp.db)
+    current_user = user_model.get_user_by_id(current_user_id)
+
+    task_model = Task(tasks_bp.db)
+    print(f"Current User Roles: {current_user.get('roles')}, Permissions: {current_user.get('permissions')}")  # Log user roles and permissions
+    if not (has_permission(current_user, 'view_all_tasks') or 'admin' in current_user.get('roles', []) or 'super_admin' in current_user.get('roles', [])):
+        return jsonify({'error': 'Permission denied'}), 403
+
+    tasks = task_model.get_tasks_by_status(Task.STATUS['ARCHIVED'])
+
+    return jsonify(tasks), 200
