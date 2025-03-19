@@ -132,3 +132,41 @@ Cookie: io=V5O6E_D3YgPvsefqAAAj
 2025-03-19 22:43:15,747 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "POST /api/auth/login HTTP/1.1" 200 -
 2025-03-19 22:43:15,807 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
 2025-03-19 22:43:15,810 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-19 22:44:01,220 - INFO - 127.0.0.1 - - [19/Mar/2025 22:44:01] "[33mOPTIONS /api/auth/profile HTTP/1.1[0m" 404 -
+2025-03-19 22:46:30,643 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/services/db_service.py', reloading
+2025-03-19 22:46:30,644 - INFO - Closing MongoDB connection pool
+2025-03-19 22:46:31,263 - INFO -  * Restarting with stat
+2025-03-19 22:46:31,458 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:46:33,159 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:46:33,181 - WARNING -  * Debugger is active!
+2025-03-19 22:46:33,184 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:48:02,426 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/services/db_service.py', reloading
+2025-03-19 22:48:02,426 - INFO - Closing MongoDB connection pool
+2025-03-19 22:48:04,546 - INFO -  * Restarting with stat
+2025-03-19 22:48:04,727 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:48:22,137 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:48:22,168 - WARNING -  * Debugger is active!
+2025-03-19 22:48:22,172 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:48:50,252 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/__init__.py', reloading
+2025-03-19 22:48:50,252 - INFO - Closing MongoDB connection pool
+2025-03-19 22:48:51,771 - INFO -  * Restarting with stat
+2025-03-19 22:48:51,951 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:49:11,789 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:49:11,813 - WARNING -  * Debugger is active!
+2025-03-19 22:49:11,815 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:50:09,995 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/services/db_service.py', reloading
+2025-03-19 22:50:09,995 - INFO - Closing MongoDB connection pool
+2025-03-19 22:50:10,694 - INFO -  * Restarting with stat
+2025-03-19 22:50:10,863 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:50:12,458 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:50:12,492 - WARNING -  * Debugger is active!
+2025-03-19 22:50:12,494 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:50:17,021 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:17] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:50:17,240 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:17] "GET /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:50:17,342 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:17] "GET /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:50:23,487 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:23] "OPTIONS /api/auth/profile HTTP/1.1" 200 -
+2025-03-19 22:50:23,793 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:23] "PUT /api/auth/profile HTTP/1.1" 200 -
+2025-03-19 22:50:30,504 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:30] "OPTIONS /api/tasks/department/ECE HTTP/1.1" 200 -
+2025-03-19 22:50:30,512 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:30] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
+2025-03-19 22:50:30,520 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:30] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
+2025-03-19 22:50:42,326 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:42] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -

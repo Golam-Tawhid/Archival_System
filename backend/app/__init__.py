@@ -85,24 +85,16 @@ def create_app(config_name='default'):
     
     atexit.register(close_mongo_client)
     
+    # Register the get_db function with app context
+    app.get_db = get_db
+    
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.tasks import tasks_bp
     from app.routes.users import users_bp
     from app.routes.reports import reports_bp
     
-    # Fix: Instead of attaching the get_db function, make it available through app context
-    app.get_db = get_db
-    
-    # Fix: Store the initial database instance in app context
-    app.mongo_db = db
-    
-    # Make blueprints aware of the app object to access db when needed
-    auth_bp.app = app
-    tasks_bp.app = app
-    users_bp.app = app
-    reports_bp.app = app
-    
+    # Register blueprints with the app
     app.register_blueprint(auth_bp)
     app.register_blueprint(tasks_bp)
     app.register_blueprint(users_bp, url_prefix='/api/users')

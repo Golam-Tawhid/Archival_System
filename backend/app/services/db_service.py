@@ -1,6 +1,7 @@
 import logging
 from flask import current_app, g
 from pymongo.errors import ConnectionFailure, OperationFailure
+from bson.objectid import ObjectId
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +28,11 @@ def find_one(collection_name, query, projection=None):
         logger.error(f"Database error in find_one: {str(e)}")
         raise
 
-def find_many(collection_name, query, projection=None, sort=None, limit=0, skip=0):
+def find_many(collection_name, query=None, projection=None, sort=None, limit=0, skip=0):
     """Find multiple documents with error handling"""
     try:
         collection = get_collection(collection_name)
-        cursor = collection.find(query, projection)
+        cursor = collection.find(query or {}, projection)
         
         if sort:
             cursor = cursor.sort(sort)
@@ -79,4 +80,29 @@ def delete_one(collection_name, query):
         return collection.delete_one(query)
     except Exception as e:
         logger.error(f"Database error in delete_one: {str(e)}")
+        raise
+
+def update_by_id(collection_name, id, data, upsert=False):
+    """Update a document by its ID"""
+    try:
+        return update_one(
+            collection_name,
+            {"_id": ObjectId(id)},
+            {"$set": data},
+            upsert
+        )
+    except Exception as e:
+        logger.error(f"Database error in update_by_id: {str(e)}")
+        raise
+
+def find_by_id(collection_name, id, projection=None):
+    """Find a document by its ID"""
+    try:
+        return find_one(
+            collection_name,
+            {"_id": ObjectId(id)},
+            projection
+        )
+    except Exception as e:
+        logger.error(f"Database error in find_by_id: {str(e)}")
         raise
