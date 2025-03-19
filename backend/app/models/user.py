@@ -1,15 +1,11 @@
 from datetime import datetime
 from bson import ObjectId
+from app.services.role_service import RoleService
 
 class User:
-    ROLES = {
-        'SUPER_ADMIN': 'super_admin',
-        'ADMIN': 'admin',
-        'DEPARTMENT_HEAD': 'department_head',
-        'FACULTY': 'faculty',
-        'STAFF': 'staff'
-    }
-
+    # Keep these for backward compatibility and reference
+    ROLES = RoleService.ROLES
+    
     DEPARTMENTS = {
         'CSE': 'Computer Science and Engineering',
         'ECE': 'Electronics and Communication Engineering',
@@ -77,38 +73,5 @@ class User:
         return users
 
     def _get_permissions_for_roles(self, roles):
-        permissions = set()
-        
-        for role in roles:
-            if role == self.ROLES['SUPER_ADMIN']:
-                permissions.update([
-                    'manage_users', 'manage_roles', 'manage_departments',
-                    'create_task', 'edit_task', 'delete_task', 'view_all_tasks',
-                    'approve_task', 'generate_reports', 'access_archives',
-                    'view_department_tasks', 'view_assigned_tasks'
-                ])
-            elif role == self.ROLES['ADMIN']:
-                permissions.update([
-                    'manage_users', 'manage_roles',
-                    'create_task', 'edit_task', 'view_all_tasks',
-                    'approve_task', 'generate_reports', 'access_archives',
-                    'view_department_tasks', 'view_assigned_tasks'
-                ])
-            elif role == self.ROLES['DEPARTMENT_HEAD']:
-                permissions.update([
-                    'create_task', 'edit_task', 'view_department_tasks',
-                    'approve_task', 'generate_reports', 'generate_department_reports',
-                    'view_assigned_tasks'
-                ])
-            elif role == self.ROLES['FACULTY']:
-                permissions.update([
-                    'create_task', 'edit_task', 'view_department_tasks',
-                    'approve_task', 'generate_reports', 'view_assigned_tasks'
-                ])
-            elif role == self.ROLES['STAFF']:
-                permissions.update([
-                    'create_task', 'edit_task', 'view_assigned_tasks',
-                    'generate_reports'
-                ])
-                
-        return list(permissions)
+        """Get all permissions for the given roles using the RoleService."""
+        return RoleService.get_permissions_for_roles(roles)

@@ -1,6 +1,14 @@
-import os
 from app import create_app
+import logging
 
-if __name__ == '__main__':
-    app = create_app(os.getenv('FLASK_CONFIG', 'default'))
-    app.run(host='0.0.0.0', port=5000)
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
+# Create app instance
+app = create_app()
+
+if __name__ == "__main__":
+    try:
+        app.run(debug=True, host='0.0.0.0')
+    except Exception as e:
+        logging.error(f"Failed to start application: {str(e)}")

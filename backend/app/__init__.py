@@ -7,6 +7,11 @@ from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 from app.config import config
 import logging
 import atexit
+from datetime import timedelta
+from .routes.auth import auth_bp
+from .routes.tasks import tasks_bp
+from .routes.users import users_bp
+from .routes.reports import reports_bp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
@@ -32,6 +37,12 @@ def create_app(config_name='default'):
     
     # Load configuration
     app.config.from_object(config[config_name])
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get('SECRET_KEY', 'dev'),
+        JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY', 'dev-jwt-secret'),
+        JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=8),
+        JWT_REFRESH_TOKEN_EXPIRES=timedelta(days=30),
+    )
     
     # Initialize CORS
     CORS(app, 
@@ -61,6 +72,12 @@ def create_app(config_name='default'):
         mongo_client.admin.command('ping')
         db = mongo_client.get_default_database()
         logger.info("Successfully connected to MongoDB Atlas")
+        
+        # Pass db instance to each blueprint
+        auth_bp.db = db
+        tasks_bp.db = db
+        users_bp.db = db
+        reports_bp.db = db
     except ConnectionFailure as e:
         logger.critical(f"Failed to connect to MongoDB Atlas: {str(e)}")
         raise
@@ -89,15 +106,9 @@ def create_app(config_name='default'):
     app.get_db = get_db
     
     # Register blueprints
-    from app.routes.auth import auth_bp
-    from app.routes.tasks import tasks_bp
-    from app.routes.users import users_bp
-    from app.routes.reports import reports_bp
-    
-    # Register blueprints with the app
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(tasks_bp)
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(tasks_bp)  # URL prefix is already defined in blueprint
     app.register_blueprint(users_bp, url_prefix='/api/users')
-    app.register_blueprint(reports_bp)
+    app.register_blueprint(reports_bp)  # URL prefix is already defined in blueprint
     
     return app

@@ -170,3 +170,33 @@ Cookie: io=V5O6E_D3YgPvsefqAAAj
 2025-03-19 22:50:30,512 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:30] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
 2025-03-19 22:50:30,520 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:30] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
 2025-03-19 22:50:42,326 - INFO - 127.0.0.1 - - [19/Mar/2025 22:50:42] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:46:39,945 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-20 01:46:58,769 - CRITICAL - Failed to connect to MongoDB Atlas: No replica set members found yet, Timeout: 10.0s, Topology Description: <TopologyDescription id: 67db1f2880619763261d9df2, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.bhfuz.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-01.bhfuz.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-02.bhfuz.mongodb.net', 27017) server_type: Unknown, rtt: None>]>
+2025-03-20 01:50:21,765 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-20 01:50:40,158 - INFO - Successfully connected to MongoDB Atlas
+2025-03-20 01:50:40,200 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.107:5000
+2025-03-20 01:50:40,200 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-20 01:50:40,201 - INFO -  * Restarting with stat
+2025-03-20 01:50:40,345 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-20 01:50:56,954 - INFO - Successfully connected to MongoDB Atlas
+2025-03-20 01:50:56,971 - WARNING -  * Debugger is active!
+2025-03-20 01:50:56,985 - INFO -  * Debugger PIN: 527-131-676
+2025-03-20 01:50:56,990 - INFO - 127.0.0.1 - - [20/Mar/2025 01:50:56] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-03-20 01:50:57,960 - INFO - 127.0.0.1 - - [20/Mar/2025 01:50:57] "POST /api/auth/login HTTP/1.1" 200 -
+2025-03-20 01:50:58,039 - INFO - 127.0.0.1 - - [20/Mar/2025 01:50:58] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:50:58,044 - INFO - 127.0.0.1 - - [20/Mar/2025 01:50:58] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:51:22,128 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:22] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:51:22,129 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:22] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:51:23,097 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:23] "OPTIONS /api/tasks/department/ECE HTTP/1.1" 200 -
+2025-03-20 01:51:23,105 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:23] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
+2025-03-20 01:51:23,113 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:23] "[35m[1mGET /api/tasks/department/ECE HTTP/1.1[0m" 500 -
+2025-03-20 01:51:26,059 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:26] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:51:26,060 - INFO - 127.0.0.1 - - [20/Mar/2025 01:51:26] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-20 01:53:02,257 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/services/role_service.py', reloading
+2025-03-20 01:53:02,257 - INFO - Closing MongoDB connection pool
+2025-03-20 01:53:05,091 - INFO -  * Restarting with stat
+2025-03-20 01:53:48,738 - INFO -  * Restarting with stat
+2025-03-20 01:53:58,469 - INFO -  * Restarting with stat
