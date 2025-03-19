@@ -27,3 +27,108 @@
 2025-01-09 21:12:12,687 - INFO - 127.0.0.1 - - [09/Jan/2025 21:12:12] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
 2025-01-09 21:12:13,450 - INFO - 127.0.0.1 - - [09/Jan/2025 21:12:13] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
 2025-01-09 21:12:14,006 - INFO - 127.0.0.1 - - [09/Jan/2025 21:12:14] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-19 22:32:24,694 - INFO - Attempting to connect to MongoDB...
+2025-03-19 22:32:24,699 - INFO - Successfully connected to MongoDB
+2025-03-19 22:32:24,724 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.107:5000
+2025-03-19 22:32:24,725 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-19 22:32:24,725 - INFO -  * Restarting with stat
+2025-03-19 22:32:24,883 - INFO - Attempting to connect to MongoDB...
+2025-03-19 22:32:24,894 - INFO - Successfully connected to MongoDB
+2025-03-19 22:32:24,922 - WARNING -  * Debugger is active!
+2025-03-19 22:32:24,924 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:32:38,559 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:38] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:32:38,563 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:38] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:32:38,576 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:38] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:32:50,787 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:50] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-03-19 22:32:50,798 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:50] "[35m[1mPOST /api/auth/login HTTP/1.1[0m" 500 -
+2025-03-19 22:32:52,954 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:52] "[35m[1mPOST /api/auth/login HTTP/1.1[0m" 500 -
+2025-03-19 22:32:53,654 - INFO - 127.0.0.1 - - [19/Mar/2025 22:32:53] "[35m[1mPOST /api/auth/login HTTP/1.1[0m" 500 -
+2025-03-19 22:38:59,746 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/config.py', reloading
+2025-03-19 22:38:59,746 - INFO - Closing MongoDB connection pool
+2025-03-19 22:39:00,307 - INFO -  * Restarting with stat
+2025-03-19 22:39:00,624 - INFO - Attempting to connect to MongoDB...
+2025-03-19 22:39:02,399 - INFO - Successfully connected to MongoDB
+2025-03-19 22:39:02,435 - WARNING -  * Debugger is active!
+2025-03-19 22:39:02,438 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:39:08,464 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/__init__.py', reloading
+2025-03-19 22:39:08,464 - INFO - Closing MongoDB connection pool
+2025-03-19 22:39:09,213 - INFO -  * Restarting with stat
+2025-03-19 22:39:09,409 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:39:11,305 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:39:11,327 - WARNING -  * Debugger is active!
+2025-03-19 22:39:11,329 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:39:45,416 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/config.py', reloading
+2025-03-19 22:39:45,416 - INFO - Closing MongoDB connection pool
+2025-03-19 22:39:46,049 - INFO -  * Restarting with stat
+2025-03-19 22:39:46,228 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:39:47,438 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:39:47,460 - WARNING -  * Debugger is active!
+2025-03-19 22:39:47,462 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:39:55,077 - INFO - 127.0.0.1 - - [19/Mar/2025 22:39:55] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:39:55,082 - INFO - 127.0.0.1 - - [19/Mar/2025 22:39:55] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:39:55,086 - INFO - 127.0.0.1 - - [19/Mar/2025 22:39:55] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:40:10,215 - INFO - 127.0.0.1 - - [19/Mar/2025 22:40:10] "OPTIONS /api/auth/register HTTP/1.1" 200 -
+2025-03-19 22:40:10,217 - INFO - 127.0.0.1 - - [19/Mar/2025 22:40:10] "[35m[1mPOST /api/auth/register HTTP/1.1[0m" 500 -
+2025-03-19 22:41:40,759 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/__init__.py', reloading
+2025-03-19 22:41:40,759 - INFO - Closing MongoDB connection pool
+2025-03-19 22:41:41,427 - INFO -  * Restarting with stat
+2025-03-19 22:41:41,607 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:41:43,212 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:41:43,235 - WARNING -  * Debugger is active!
+2025-03-19 22:41:43,237 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:42:03,292 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/services/db_service.py', reloading
+2025-03-19 22:42:03,293 - INFO - Closing MongoDB connection pool
+2025-03-19 22:42:03,745 - INFO -  * Restarting with stat
+2025-03-19 22:42:03,933 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:42:04,979 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:42:05,012 - WARNING -  * Debugger is active!
+2025-03-19 22:42:05,014 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:42:21,063 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/__init__.py', reloading
+2025-03-19 22:42:21,063 - INFO - Closing MongoDB connection pool
+2025-03-19 22:42:21,727 - INFO -  * Restarting with stat
+2025-03-19 22:42:21,917 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:42:23,089 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:42:23,117 - WARNING -  * Debugger is active!
+2025-03-19 22:42:23,119 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:42:32,149 - INFO -  * Detected change in '/home/gtfahad/Projects/Archival_System/backend/app/routes/auth.py', reloading
+2025-03-19 22:42:32,149 - INFO - Closing MongoDB connection pool
+2025-03-19 22:42:33,032 - INFO -  * Restarting with stat
+2025-03-19 22:42:33,216 - INFO - Attempting to connect to MongoDB Atlas...
+2025-03-19 22:42:36,050 - INFO - Successfully connected to MongoDB Atlas
+2025-03-19 22:42:36,075 - WARNING -  * Debugger is active!
+2025-03-19 22:42:36,076 - INFO -  * Debugger PIN: 172-571-633
+2025-03-19 22:43:00,757 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:00] "OPTIONS /api/auth/me HTTP/1.1" 200 -
+2025-03-19 22:43:00,761 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:00] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:43:00,764 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:00] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 422 -
+2025-03-19 22:43:13,337 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:13] "OPTIONS /api/auth/register HTTP/1.1" 200 -
+2025-03-19 22:43:13,341 - INFO - Registration endpoint hit
+2025-03-19 22:43:13,341 - INFO - Request headers: Host: localhost:5000
+Connection: keep-alive
+Content-Length: 114
+Sec-Ch-Ua-Platform: "Linux"
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0MjM5ODUxOSwianRpIjoiZDhjN2M3NmMtN2E5MS00OWY4LTg4N2QtNGEwMjcxMjU5NzNjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY3ZGFlNDMzZjA3ODA2ZWRjMjNiNzcxMSIsIm5iZiI6MTc0MjM5ODUxOSwiY3NyZiI6IjllMzJjYTIxLTBiODItNDQwYS1iM2VkLWE1M2YwMDY5MTExMyIsImV4cCI6MTc0MjQwMjExOX0.6vHHlFgYkv2UaiM8QJ_l1zBIpHyEQf0cyD3C3CtQJUY
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0
+Accept: application/json, text/plain, */*
+Sec-Ch-Ua: "Chromium";v="134", "Not:A-Brand";v="24", "Microsoft Edge";v="134"
+Content-Type: application/json
+Sec-Ch-Ua-Mobile: ?0
+Origin: http://localhost:3000
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://localhost:3000/
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-US,en;q=0.9
+Cookie: io=V5O6E_D3YgPvsefqAAAj
+
+
+2025-03-19 22:43:13,341 - INFO - Request method: POST
+2025-03-19 22:43:13,341 - INFO - Registration request received: {'name': 'Md Golam Tawhid', 'email': 'golam.tawhid.fahad@g.bracu.ac.bd.com', 'password': 'asdfasdf', 'department': 'ECE'}
+2025-03-19 22:43:13,718 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:13] "[35m[1mPOST /api/auth/register HTTP/1.1[0m" 201 -
+2025-03-19 22:43:15,498 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-03-19 22:43:15,747 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "POST /api/auth/login HTTP/1.1" 200 -
+2025-03-19 22:43:15,807 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -
+2025-03-19 22:43:15,810 - INFO - 127.0.0.1 - - [19/Mar/2025 22:43:15] "[32mOPTIONS /api/tasks HTTP/1.1[0m" 308 -

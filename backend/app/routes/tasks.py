@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.services.db_service import find_many, insert_one, update_one, delete_one
+import datetime
 from ..models.task import Task
 from ..models.user import User
 from ..models.comment import Comment  # Import the Comment model
 from ..utils import has_permission
-from datetime import datetime
 import json
 import logging
 
@@ -64,31 +65,29 @@ def get_comments(task_id):
 @tasks_bp.route('/', methods=['POST'])
 @jwt_required()  # Added the jwt_required decorator here
 def create_task():
-    logging.info("Create task endpoint hit")
-    current_user_id = get_jwt_identity()
-    user_model = User(tasks_bp.db)
-    current_user = user_model.get_user_by_id(current_user_id)
-    
-    if not has_permission(current_user, 'create_task'):
-        return jsonify({'error': 'Permission denied'}), 403
-    
+    user_id = get_jwt_identity()
     data = request.get_json()
-    logging.info(f"Request data: {data}")
     
-    required_fields = ['title', 'description', 'department']
-    if not all(field in data for field in required_fields):
-        return jsonify({'error': 'Missing required fields'}), 400
+    # Validate required fields
+    if not data.get('title'):
+        return jsonify({"error": "Title is required"}), 400
     
-    # Add creator information
-    data['created_by'] = current_user_id
+    # Create task document
+    task = {
+        "title": data.get('title'),
+        "description": data.get('description', ''),
+        "status": data.get('status', 'pending'),
+        "priority": data.get('priority', 'medium'),
+        "user_id": user_id,
+        "created_at": datetime.datetime.utcnow(),
+        "updated_at": datetime.datetime.utcnow()
+    }
     
-    task_model = Task(tasks_bp.db)
-    try:
-        task = task_model.create_task(data)
-        return jsonify(task), 201
-    except Exception as e:
-        logging.error(f"Error creating task: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+    # Insert using db service
+    result = insert_one('tasks', task)
+    task['_id'] = str(result.inserted_id)
+    
+    return jsonify(task), 201
 
 @tasks_bp.route('/<task_id>', methods=['GET'])
 @jwt_required()
@@ -250,4 +249,36 @@ def get_archived_tasks():
     task_model = Task(tasks_bp.db)
     tasks = task_model.get_tasks_by_status(Task.STATUS['ARCHIVED'])
 
+    return jsonify(tasks), 200
+
+@tasks_bp.route('/', methods=['GET'])
+@jwt_required()
+def get_tasks():
+    user_id = get_jwt_identity()
+    
+    # Get filter parameters
+    status = request.args.get('status')
+    priority = request.args.get('priority')
+    
+    # Build query
+    query = {"user_id": user_id}
+    if status:
+        query["status"] = status
+    if priority:
+        query["priority"] = priority
+        
+    # Add pagination
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+    skip = (page - 1) * per_page
+    
+    # Execute query with the db service
+    tasks = find_many(
+        'tasks',
+        query,
+        sort=[("created_at", -1)],
+        limit=per_page,
+        skip=skip
+    )
+    
     return jsonify(tasks), 200
