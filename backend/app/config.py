@@ -24,6 +24,9 @@ class Config:
     MONGO_SERVER_SELECTION_TIMEOUT_MS = int(os.environ.get('MONGO_SERVER_SELECTION_TIMEOUT_MS', 10000))
     MONGO_SOCKET_TIMEOUT_MS = int(os.environ.get('MONGO_SOCKET_TIMEOUT_MS', 20000))
     
+    # New config option to allow invalid TLS certificates
+    MONGO_TLS_ALLOW_INVALID_CERTIFICATES = os.environ.get('MONGO_TLS_ALLOW_INVALID_CERTIFICATES', 'True').lower() in ['true', '1', 'yes']
+    
     # CORS settings
     ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split(',')
 

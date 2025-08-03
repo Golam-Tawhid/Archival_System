@@ -56,21 +56,34 @@ def create_app(config_name='default'):
     
     # Initialize MongoDB connection with improved error handling
     try:
-        logger.info("Attempting to connect to MongoDB Atlas...")
-        # Configure connection with Atlas-optimized parameters
-        mongo_client = MongoClient(
-            app.config['MONGO_URI'],
-            maxPoolSize=app.config.get('MONGO_MAX_POOL_SIZE', 10),
-            minPoolSize=app.config.get('MONGO_MIN_POOL_SIZE', 5),
-            serverSelectionTimeoutMS=app.config.get('MONGO_SERVER_SELECTION_TIMEOUT_MS', 10000),
-            connectTimeoutMS=app.config.get('MONGO_CONNECT_TIMEOUT_MS', 10000),
-            socketTimeoutMS=app.config.get('MONGO_SOCKET_TIMEOUT_MS', 20000),
-            retryWrites=True,
-            retryReads=True
-        )
+        mongo_uri = app.config['MONGO_URI']
+        logger.info(f"Attempting to connect to MongoDB...")
+        
+        # Configure connection parameters based on URI type
+        connection_params = {
+            'maxPoolSize': app.config.get('MONGO_MAX_POOL_SIZE', 10),
+            'minPoolSize': app.config.get('MONGO_MIN_POOL_SIZE', 5),
+            'serverSelectionTimeoutMS': app.config.get('MONGO_SERVER_SELECTION_TIMEOUT_MS', 10000),
+            'connectTimeoutMS': app.config.get('MONGO_CONNECT_TIMEOUT_MS', 10000),
+            'socketTimeoutMS': app.config.get('MONGO_SOCKET_TIMEOUT_MS', 20000),
+        }
+        
+        # Add Atlas-specific parameters only for mongodb+srv connections
+        if mongo_uri.startswith('mongodb+srv://'):
+            logger.info("Detected MongoDB Atlas connection string")
+            connection_params.update({
+                'retryWrites': True,
+                'retryReads': True,
+                'tls': True,
+                'tlsAllowInvalidCertificates': app.config.get('MONGO_TLS_ALLOW_INVALID_CERTIFICATES', True)
+            })
+        else:
+            logger.info("Detected local MongoDB connection string")
+        
+        mongo_client = MongoClient(mongo_uri, **connection_params)
         # Force a connection to verify it works
         mongo_client.admin.command('ping')
-        db = mongo_client.get_default_database()
+        db = mongo_client[app.config['MONGO_DATABASE']]
         logger.info("Successfully connected to MongoDB Atlas")
         
         # Pass db instance to each blueprint
