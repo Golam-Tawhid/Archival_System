@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 def check_db_connection():
     """Verify that the database connection is available"""
-    if not reports_bp.db:
+    if reports_bp.db is None:
         logger.error("Database connection not available for reports blueprint")
         raise Exception("Database connection not initialized")
 

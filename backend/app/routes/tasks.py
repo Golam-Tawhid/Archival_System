@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def check_db_connection():
     """Verify that the database connection is available"""
-    if not tasks_bp.db:
+    if tasks_bp.db is None:
         logger.error("Database connection not available for tasks blueprint")
         raise Exception("Database connection not initialized")
 
@@ -77,36 +77,73 @@ def get_comments(task_id):
         logger.error(f"Error in get_comments: {str(e)}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
+@tasks_bp.route('/debug/routes', methods=['GET'])
+def list_routes():
+    """Debug endpoint to list all registered routes"""
+    from flask import current_app
+    routes = []
+    for rule in current_app.url_map.iter_rules():
+        routes.append({
+            'endpoint': rule.endpoint,
+            'methods': list(rule.methods),
+            'rule': str(rule)
+        })
+    return jsonify(routes)
+
 @tasks_bp.route('/', methods=['POST'])
-@jwt_required()  # Added the jwt_required decorator here
+@tasks_bp.route('', methods=['POST'])  # Added route without trailing slash
+@jwt_required()
 def create_task():
     try:
+        logger.info("Create task endpoint called")
         check_db_connection()
-        user_id = get_jwt_identity()
+        current_user_id = get_jwt_identity()
         data = request.get_json()
+        logger.info(f"User ID: {current_user_id}, Data: {data}")
+        
+        # Get current user info to check permissions and get department
+        user_model = User(tasks_bp.db)
+        current_user = user_model.get_user_by_id(current_user_id)
+        logger.info(f"Current user: {current_user}")
+        
+        if not current_user:
+            logger.error("User not found")
+            return jsonify({'error': 'User not found'}), 404
+            
+        # Check if user has permission to create tasks
+        has_perm = has_permission(current_user, 'create_task')
+        logger.info(f"User has create_task permission: {has_perm}")
+        if not has_perm:
+            return jsonify({'error': 'Permission denied'}), 403
         
         # Validate required fields
         if not data.get('title'):
+            logger.error("Title is required")
             return jsonify({"error": "Title is required"}), 400
+            
+        if not data.get('department'):
+            # Use current user's department if not specified
+            data['department'] = current_user.get('department')
+            logger.info(f"Using user department: {data['department']}")
+            
+        if not data['department']:
+            logger.error("Department is required")
+            return jsonify({"error": "Department is required"}), 400
         
-        # Create task document
-        task = {
-            "title": data.get('title'),
-            "description": data.get('description', ''),
-            "status": data.get('status', 'pending'),
-            "priority": data.get('priority', 'medium'),
-            "user_id": user_id,
-            "created_at": datetime.datetime.utcnow(),
-            "updated_at": datetime.datetime.utcnow()
-        }
+        # Add created_by field
+        data['created_by'] = current_user_id
+        logger.info(f"Final task data: {data}")
         
-        # Insert using db service
-        result = insert_one('tasks', task)
-        task['_id'] = str(result.inserted_id)
+        # Create task using the Task model
+        task_model = Task(tasks_bp.db)
+        task = task_model.create_task(data)
+        logger.info(f"Task created successfully: {task}")
         
         return jsonify(task), 201
     except Exception as e:
         logger.error(f"Error in create_task: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
 @tasks_bp.route('/<task_id>', methods=['GET'])
